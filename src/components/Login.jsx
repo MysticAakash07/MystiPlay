@@ -22,7 +22,7 @@ export default function Login() {
 		<Container>
 			<img
 				src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Full_Logo_RGB_Black.png"
-				alt="Spotify"
+				alt="spotify"
 			/>
 			<button onClick={handleClick}>Connect Spotify</button>
 		</Container>

@@ -69,7 +69,7 @@ const Container = styled.div`
 				background-color: #282828;
 				padding: 0.2rem;
 				border-radius: 1rem;
-        color: #c7c5c5;
+				color: #c7c5c5;
 			}
 		}
 	}

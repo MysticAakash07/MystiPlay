@@ -18,6 +18,16 @@ export default function Body({ headerBackground }) {
 					},
 				}
 			);
+			console.log(response.data);
+
+			const ownerId = response.data.owner.id;
+			const ownerResponse = await axios.get(
+				`https://api.spotify.com/v1/users/${ownerId}`,
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			);
+
 			const selectedPlaylist = {
 				id: response.data.id,
 				name: response.data.name,
@@ -25,9 +35,14 @@ export default function Body({ headerBackground }) {
 					? ""
 					: response.data.description,
 				image: response.data.images[0].url,
-				tracks: response.data.tracks.items.map(({ track }) => ({
+				owner: response.data.owner.display_name,
+				owner_id: response.data.owner.id,
+				owner_image: ownerResponse.data.images?.[0]?.url || "",
+				total_songs: response.data.tracks.total,
+				tracks: response.data.tracks.items.map(({ track }, index) => ({
 					id: track.id,
 					name: track.name,
+					index,
 					artists: track.artists.map((artist) => artist.name),
 					image: track.album.images[2].url,
 					duration: track.duration_ms,
@@ -44,7 +59,7 @@ export default function Body({ headerBackground }) {
 	const mstoMinutesAndSeconds = (ms) => {
 		const minutes = Math.floor(ms / 60000);
 		const seconds = ((ms % 60000) / 1000).toFixed(0);
-		return minutes + ":" + (seconds < 10 ? "0":"") + seconds;
+		return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 	};
 	return (
 		<Container headerBackground={headerBackground}>
@@ -58,6 +73,20 @@ export default function Body({ headerBackground }) {
 							<span className="type">PLAYLIST</span>
 							<h1 className="title">{selectedPlaylist.name}</h1>
 							<p className="description">{selectedPlaylist.description}</p>
+							<div className="playlistDetails">
+								<img
+									src={selectedPlaylist.owner_image}
+									alt={selectedPlaylist.owner}
+								/>
+								<a
+									href={`https://open.spotify.com/user/${selectedPlaylist.owner_id}`}
+								>
+									{selectedPlaylist.owner}
+								</a>
+								<span>
+									<b>·</b> {selectedPlaylist.total_songs} songs
+								</span>
+							</div>
 						</div>
 					</div>
 					<div className="list">
@@ -124,7 +153,7 @@ const Container = styled.div`
 	.playlist {
 		margin: 0 2rem;
 		display: flex;
-		align-items: center;
+		align-items: flex-end;
 		gap: 2rem;
 		.image {
 			img {
@@ -135,11 +164,30 @@ const Container = styled.div`
 		.details {
 			display: flex;
 			flex-direction: column;
-			// gap: 1rem;
+			justify-content: space-between;
 			color: #e0dede;
 			.title {
 				color: white;
 				font-size: 4rem;
+				margin: 0;
+			}
+			.playlistDetails {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				img {
+					height: 5vh;
+					border-radius: 50%;
+				}
+				a {
+					text-decoration: none;
+					font-weight: bold;
+					color: #e0dede;
+					&:hover {
+						text-decoration: underline;
+						color: white;
+					}
+				}
 			}
 		}
 	}

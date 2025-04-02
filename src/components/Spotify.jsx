@@ -45,7 +45,8 @@ export default function Spotify() {
 				<div className="body" ref={bodyRef} onScroll={bodyScrolled}>
 					<NavBar navBackground={navBackground} />
 					<div className="body_contents">
-						<Body headerBackground={headerBackground} />
+						<Body 
+						headerBackground={headerBackground} />
 					</div>
 				</div>
 			</div>

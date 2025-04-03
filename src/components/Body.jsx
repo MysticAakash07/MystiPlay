@@ -18,7 +18,6 @@ export default function Body({ headerBackground }) {
 					},
 				}
 			);
-			console.log(response.data);
 
 			const ownerId = response.data.owner.id;
 			const ownerResponse = await axios.get(
@@ -169,9 +168,9 @@ const Container = styled.div`
 			.title {
 				color: white;
 				font-size: 4rem;
-				margin: 0;
 			}
 			.playlistDetails {
+				margin: 0.6rem 0;
 				display: flex;
 				align-items: center;
 				gap: 0.5rem;

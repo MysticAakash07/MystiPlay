@@ -45,7 +45,7 @@ export default function PlayerControls() {
 				<BsShuffle />
 			</div>
 			<div className="prev">
-				<CgPlayTrackPrev onClick={() => changeTrack("prev")} />
+				<CgPlayTrackPrev onClick={() => changeTrack("previous")} />
 			</div>
 			<div className="state">
 				{playerState ? <BsFillPauseCircleFill /> : <BsFillPlayCircleFill />}

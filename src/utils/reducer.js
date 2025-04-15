@@ -1,4 +1,3 @@
-import { act } from "react";
 import { reducerCases } from "./Constants";
 
 export const initialState = {

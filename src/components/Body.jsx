@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useStateProvider } from "../utils/StateProvider";
 import axios from "axios";
 import { reducerCases } from "../utils/Constants";
+import { FaPlay } from "react-icons/fa";
+
 export default function Body({ headerBackground }) {
 	const [
 		{ token, selectedPlaylistId, selectedPlaylist, currentView },
@@ -40,6 +42,7 @@ export default function Body({ headerBackground }) {
 				owner_id: response.data.owner.id,
 				owner_image: ownerResponse.data.images?.[0]?.url || "",
 				total_songs: response.data.tracks.total,
+				uri: response.data.uri,
 				tracks: response.data.tracks.items.map(({ track }, index) => ({
 					id: track.id,
 					name: track.name,
@@ -63,20 +66,13 @@ export default function Body({ headerBackground }) {
 		return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 	};
 
-	const playTrack = async (
-		id,
-		name,
-		artists,
-		image,
-		context_uri,
-		track_number
-	) => {
+	const playTrack = async (id, name, artists, image, context_uri, index) => {
 		const response = await axios.put(
 			`https://api.spotify.com/v1/me/player/play/`,
 			{
 				context_uri,
 				offset: {
-					position: track_number - 1,
+					position: index,
 				},
 				position_ms: 0,
 			},
@@ -105,107 +101,102 @@ export default function Body({ headerBackground }) {
 	};
 
 	return (
-	<Container headerBackground={headerBackground}>
-		{currentView === "home" ? (
-			<h2 style={{ color: "white", margin: "2rem" }}>Welcome to Home</h2>
-		) : selectedPlaylist && (
-			<>
-				<div className="playlist">
-					<div className="image">
-						<img src={selectedPlaylist.image} alt={selectedPlaylist} />
-					</div>
-					<div className="details">
-						<span className="type">PLAYLIST</span>
-						<h1 className="title">{selectedPlaylist.name}</h1>
-						<p className="description">{selectedPlaylist.description}</p>
-						<div className="playlistDetails">
-							<img
-								src={selectedPlaylist.owner_image}
-								alt={selectedPlaylist.owner}
-							/>
-							<a
-								href={`https://open.spotify.com/user/${selectedPlaylist.owner_id}`}
-							>
-								{selectedPlaylist.owner}
-							</a>
-							<span>
-								<b>·</b> {selectedPlaylist.total_songs} songs
-							</span>
-						</div>
-					</div>
-				</div>
-				<div className="list">
-					<div className="header__row">
-						<div className="col">
-							<span>#</span>
-						</div>
-						<div className="col">
-							<span>TITLE</span>
-						</div>
-						<div className="col">
-							<span>ALBUM</span>
-						</div>
-						<div className="col">
-							<span>
-								<AiFillClockCircle />
-							</span>
-						</div>
-					</div>
-					<div className="tracks">
-						{selectedPlaylist.tracks.map(
-							({
-								id,
-								index,
-								name,
-								artists,
-								image,
-								duration,
-								album,
-								context_uri,
-								track_number,
-							}) => (
-								<div
-									className="row"
-									key={id}
-									onClick={() =>
-										playTrack(
-											id,
-											name,
-											artists,
-											image,
-											context_uri,
-											track_number
-										)
-									}
-								>
-									<div className="col">
-										<span>{index + 1}</span>
-									</div>
-									<div className="col detail">
-										<div className="image">
-											<img src={image} alt="track" />
-										</div>
-										<div className="info">
-											<span className="name">{name}</span>
-											<span className="artists">{artists}</span>
-										</div>
-									</div>
-									<div className="col">
-										<span>{album}</span>
-									</div>
-									<div className="col">
-										<span>{mstoMinutesAndSeconds(duration)}</span>
-									</div>
+		<Container headerBackground={headerBackground}>
+			{currentView === "home" ? (
+				<h2 style={{ color: "white", margin: "2rem" }}>Welcome to Home</h2>
+			) : (
+				selectedPlaylist && (
+					<>
+						<div className="playlist">
+							<div className="image">
+								<img src={selectedPlaylist.image} alt={selectedPlaylist} />
+							</div>
+							<div className="details">
+								<span className="type">PLAYLIST</span>
+								<h1 className="title">{selectedPlaylist.name}</h1>
+								<p className="description">{selectedPlaylist.description}</p>
+								<div className="playlistDetails">
+									<img
+										src={selectedPlaylist.owner_image}
+										alt={selectedPlaylist.owner}
+									/>
+									<a
+										href={`https://open.spotify.com/user/${selectedPlaylist.owner_id}`}
+									>
+										{selectedPlaylist.owner}
+									</a>
+									<span>
+										<b>·</b> {selectedPlaylist.total_songs} songs
+									</span>
 								</div>
-							)
-						)}
-					</div>
-				</div>
-			</>
-		)}
-	</Container>
-);
+							</div>
+						</div>
+						<div className="list">
+							<div className="header__row">
+								<div className="col">
+									<span>#</span>
+								</div>
+								<div className="col">
+									<span>TITLE</span>
+								</div>
+								<div className="col">
+									<span>ALBUM</span>
+								</div>
+								<div className="col">
+									<span>
+										<AiFillClockCircle />
+									</span>
+								</div>
+							</div>
+							<div className="tracks">
+								{selectedPlaylist.tracks.map(
+									({ id, index, name, artists, image, duration, album }) => (
+										<div
+											className="row"
+											key={id}
+											onClick={() =>
+												playTrack(
+													id,
+													name,
+													artists,
+													image,
+													selectedPlaylist.uri,
+													index
+												)
+											}
+										>
+											<div className="col index-col">
+												<span className="track-number">{index + 1}</span>
+												<span className="play-icon">
+													<FaPlay />
+												</span>
+											</div>
 
+											<div className="col detail">
+												<div className="image">
+													<img src={image} alt="track" />
+												</div>
+												<div className="info">
+													<span className="name">{name}</span>
+													<span className="artists">{artists}</span>
+												</div>
+											</div>
+											<div className="col">
+												<span>{album}</span>
+											</div>
+											<div className="col">
+												<span>{mstoMinutesAndSeconds(duration)}</span>
+											</div>
+										</div>
+									)
+								)}
+							</div>
+						</div>
+					</>
+				)
+			)}
+		</Container>
+	);
 }
 
 const Container = styled.div`
@@ -253,7 +244,7 @@ const Container = styled.div`
 	.list {
 		.header__row {
 			display: grid;
-			grid-template-columns: 0.3fr 3fr 2fr 0.1fr;
+			grid-template-columns: 0.25fr 3fr 2fr 0.1fr;
 			color: #dddcdc;
 			margin: 1rem 0 0 0;
 			position: sticky;
@@ -271,18 +262,51 @@ const Container = styled.div`
 			.row {
 				padding: 0.5rem 1rem;
 				display: grid;
-				grid-template-columns: 0.3fr 3.1fr 2fr 0.1fr;
+				grid-template-columns: 0.25fr 3.1fr 2fr 0.1fr;
+
 				&:hover {
 					background-color: rgba(0, 0, 0, 0.3);
 				}
+
 				.col {
 					display: flex;
 					align-items: center;
 					color: #dddcdc;
-					.img {
-						height: 40px;
+				}
+
+				.index-col {
+					position: relative;
+					width: 100%;
+					justify-content: flex-start;
+
+					.track-number {
+						display: inline;
+					}
+
+					.play-icon {
+						display: inline-block;
+						opacity: 0; 
+						visibility: hidden; 
+						position: absolute;
+						svg {
+							color: white;
+							height: 1rem;
+						}
+						transition: opacity 0.2s ease, visibility 0s 0.2s;
 					}
 				}
+
+				&:hover .index-col {
+					.track-number {
+						display: none;
+					}
+					.play-icon {
+						opacity: 1; 
+						visibility: visible; 
+						transition: opacity 0.2s ease, visibility 0s 0s; 
+					}
+				}
+
 				.detail {
 					display: flex;
 					gap: 1rem;

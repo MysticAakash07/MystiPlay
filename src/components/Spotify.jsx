@@ -24,6 +24,7 @@ export default function Spotify() {
 
 	useEffect(() => {
 		const getUserInfo = async () => {
+			// Get user info
 			const { data } = await axios.get("https://api.spotify.com/v1/me", {
 				headers: {
 					Authorization: "Bearer " + token,
@@ -35,9 +36,29 @@ export default function Spotify() {
 				userName: data.display_name,
 			};
 			dispatch({ type: reducerCases.SET_USER, userInfo });
+
+			// Get Player status
+			const response = await axios.get("https://api.spotify.com/v1/me/player", {
+				headers: {
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (response.status === 204 || response.data === "") return;
+
+			const { is_playing} = response.data;
+			const {volume_percent} = response.data.device;
+			dispatch({
+				type: reducerCases.SET_PLAYER_STATE,
+				playerState: is_playing,
+			});
+			dispatch({ type: reducerCases.SET_VOLUME, volume: volume_percent });
 		};
 		getUserInfo();
 	}, [token, dispatch]);
+
+	
 	return (
 		<Container>
 			<div className="spotify_body">
@@ -45,8 +66,7 @@ export default function Spotify() {
 				<div className="body" ref={bodyRef} onScroll={bodyScrolled}>
 					<NavBar navBackground={navBackground} />
 					<div className="body_contents">
-						<Body 
-						headerBackground={headerBackground} />
+						<Body headerBackground={headerBackground} />
 					</div>
 				</div>
 			</div>

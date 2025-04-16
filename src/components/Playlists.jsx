@@ -28,6 +28,7 @@ export default function Playlists() {
 
 	const changeCurrentPlaylist = (selectedPlaylistId) => {
 		dispatch({type: reducerCases.SET_PLAYLIST_ID, selectedPlaylistId});
+		dispatch({type: reducerCases.SET_VIEW, currentView: "playlist"});
 	}
 
 	return (

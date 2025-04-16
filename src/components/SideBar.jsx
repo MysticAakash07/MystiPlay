@@ -2,7 +2,16 @@ import styled from "styled-components";
 import { IoLibrary } from "react-icons/io5";
 import { MdHomeFilled, MdSearch } from "react-icons/md";
 import Playlists from "./Playlists";
+import { useStateProvider } from "../utils/StateProvider";
+import { reducerCases } from "../utils/Constants";
+
 export default function SideBar() {
+	const [{}, dispatch] = useStateProvider();
+
+	const gotoHome = () => {
+		dispatch({ type: reducerCases.SET_VIEW, currentview: "home" });
+	};
+
 	return (
 		<Container>
 			<div className="top_links">
@@ -13,13 +22,9 @@ export default function SideBar() {
 					/>
 				</div>
 				<ul>
-					<li>
+					<li onClick={gotoHome}>
 						<MdHomeFilled />
 						<span>Home</span>
-					</li>
-					<li>
-						<MdSearch />
-						<span>search</span>
 					</li>
 					<li>
 						<IoLibrary />
@@ -27,7 +32,7 @@ export default function SideBar() {
 					</li>
 				</ul>
 			</div>
-            <Playlists />
+			<Playlists />
 		</Container>
 	);
 }

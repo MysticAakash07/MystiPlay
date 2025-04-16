@@ -5,8 +5,10 @@ import { useStateProvider } from "../utils/StateProvider";
 import axios from "axios";
 import { reducerCases } from "../utils/Constants";
 export default function Body({ headerBackground }) {
-	const [{ token, selectedPlaylistId, selectedPlaylist }, dispatch] =
-		useStateProvider();
+	const [
+		{ token, selectedPlaylistId, selectedPlaylist, currentView },
+		dispatch,
+	] = useStateProvider();
 	useEffect(() => {
 		const getInitialPlaylist = async () => {
 			const response = await axios.get(
@@ -101,105 +103,109 @@ export default function Body({ headerBackground }) {
 			});
 		}
 	};
+
 	return (
-		<Container headerBackground={headerBackground}>
-			{selectedPlaylist && (
-				<>
-					<div className="playlist">
-						<div className="image">
-							<img src={selectedPlaylist.image} alt={selectedPlaylist} />
-						</div>
-						<div className="details">
-							<span className="type">PLAYLIST</span>
-							<h1 className="title">{selectedPlaylist.name}</h1>
-							<p className="description">{selectedPlaylist.description}</p>
-							<div className="playlistDetails">
-								<img
-									src={selectedPlaylist.owner_image}
-									alt={selectedPlaylist.owner}
-								/>
-								<a
-									href={`https://open.spotify.com/user/${selectedPlaylist.owner_id}`}
-								>
-									{selectedPlaylist.owner}
-								</a>
-								<span>
-									<b>·</b> {selectedPlaylist.total_songs} songs
-								</span>
-							</div>
+	<Container headerBackground={headerBackground}>
+		{currentView === "home" ? (
+			<h2 style={{ color: "white", margin: "2rem" }}>Welcome to Home</h2>
+		) : selectedPlaylist && (
+			<>
+				<div className="playlist">
+					<div className="image">
+						<img src={selectedPlaylist.image} alt={selectedPlaylist} />
+					</div>
+					<div className="details">
+						<span className="type">PLAYLIST</span>
+						<h1 className="title">{selectedPlaylist.name}</h1>
+						<p className="description">{selectedPlaylist.description}</p>
+						<div className="playlistDetails">
+							<img
+								src={selectedPlaylist.owner_image}
+								alt={selectedPlaylist.owner}
+							/>
+							<a
+								href={`https://open.spotify.com/user/${selectedPlaylist.owner_id}`}
+							>
+								{selectedPlaylist.owner}
+							</a>
+							<span>
+								<b>·</b> {selectedPlaylist.total_songs} songs
+							</span>
 						</div>
 					</div>
-					<div className="list">
-						<div className="header__row">
-							<div className="col">
-								<span>#</span>
-							</div>
-							<div className="col">
-								<span>TITLE</span>
-							</div>
-							<div className="col">
-								<span>ALBUM</span>
-							</div>
-							<div className="col">
-								<span>
-									<AiFillClockCircle />
-								</span>
-							</div>
+				</div>
+				<div className="list">
+					<div className="header__row">
+						<div className="col">
+							<span>#</span>
 						</div>
-						<div className="tracks">
-							{selectedPlaylist.tracks.map(
-								({
-									id,
-									index,
-									name,
-									artists,
-									image,
-									duration,
-									album,
-									context_uri,
-									track_number,
-								}) => (
-									<div
-										className="row"
-										key={id}
-										onClick={() =>
-											playTrack(
-												id,
-												name,
-												artists,
-												image,
-												context_uri,
-												track_number
-											)
-										}
-									>
-										<div className="col">
-											<span>{index + 1}</span>
+						<div className="col">
+							<span>TITLE</span>
+						</div>
+						<div className="col">
+							<span>ALBUM</span>
+						</div>
+						<div className="col">
+							<span>
+								<AiFillClockCircle />
+							</span>
+						</div>
+					</div>
+					<div className="tracks">
+						{selectedPlaylist.tracks.map(
+							({
+								id,
+								index,
+								name,
+								artists,
+								image,
+								duration,
+								album,
+								context_uri,
+								track_number,
+							}) => (
+								<div
+									className="row"
+									key={id}
+									onClick={() =>
+										playTrack(
+											id,
+											name,
+											artists,
+											image,
+											context_uri,
+											track_number
+										)
+									}
+								>
+									<div className="col">
+										<span>{index + 1}</span>
+									</div>
+									<div className="col detail">
+										<div className="image">
+											<img src={image} alt="track" />
 										</div>
-										<div className="col detail">
-											<div className="image">
-												<img src={image} alt="track" />
-											</div>
-											<div className="info">
-												<span className="name">{name}</span>
-												<span className="artists">{artists}</span>
-											</div>
-										</div>
-										<div className="col">
-											<span>{album}</span>
-										</div>
-										<div className="col">
-											<span>{mstoMinutesAndSeconds(duration)}</span>
+										<div className="info">
+											<span className="name">{name}</span>
+											<span className="artists">{artists}</span>
 										</div>
 									</div>
-								)
-							)}
-						</div>
+									<div className="col">
+										<span>{album}</span>
+									</div>
+									<div className="col">
+										<span>{mstoMinutesAndSeconds(duration)}</span>
+									</div>
+								</div>
+							)
+						)}
 					</div>
-				</>
-			)}
-		</Container>
-	);
+				</div>
+			</>
+		)}
+	</Container>
+);
+
 }
 
 const Container = styled.div`

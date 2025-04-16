@@ -178,7 +178,7 @@ export default function Body({ headerBackground }) {
 												</div>
 												<div className="info">
 													<span className="name">{name}</span>
-													<span className="artists">{artists}</span>
+													<span className="artists">{artists.join(", ")}</span>
 												</div>
 											</div>
 											<div className="col">

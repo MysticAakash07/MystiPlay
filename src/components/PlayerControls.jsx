@@ -3,16 +3,18 @@ import {
 	BsFillPlayCircleFill,
 	BsFillPauseCircleFill,
 	BsShuffle,
+	BsRepeat1,
 } from "react-icons/bs";
 import { CgPlayTrackNext, CgPlayTrackPrev } from "react-icons/cg";
 import { FiRepeat } from "react-icons/fi";
 import { useStateProvider } from "../utils/StateProvider";
 import axios from "axios";
 import { reducerCases } from "../utils/Constants";
+import { useEffect } from "react";
 
 export default function PlayerControls() {
-
-	const [{ playerState, token }, dispatch] = useStateProvider();
+	const [{ playerState, token, shuffleState, repeatState }, dispatch] =
+		useStateProvider();
 
 	const changeTrack = async (type) => {
 		await axios.post(
@@ -67,10 +69,96 @@ export default function PlayerControls() {
 		});
 	};
 
+	const toggleShuffle = async () => {
+		const newShuffleState = !shuffleState;
+		await axios.put(
+			`https://api.spotify.com/v1/me/player/shuffle?state=${newShuffleState}`,
+			{},
+			{
+				headers: {
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+			}
+		);
+
+		dispatch({
+			type: reducerCases.SET_SHUFFLE_STATE,
+			shuffleState: newShuffleState,
+		});
+	};
+
+	const cycleRepeat = async () => {
+		const next =
+			repeatState === "off"
+				? "context"
+				: repeatState === "context"
+				? "track"
+				: "off";
+
+		await axios.put(
+			`https://api.spotify.com/v1/me/player/repeat?state=${next}`,
+			{},
+			{
+				headers: {
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+			}
+		);
+		dispatch({ type: reducerCases.SET_REPEAT_STATE, repeatState: next });
+	};
+
+	useEffect(() => {
+		const fetchPlayBackState = async () => {
+			const response = await axios.get("https://api.spotify.com/v1/me/player", {
+				headers: {
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (response.data) {
+				dispatch({
+					type: reducerCases.SET_SHUFFLE_STATE,
+					shuffleState: response.data.shuffle_state,
+				});
+				dispatch({
+					type: reducerCases.SET_REPEAT_STATE,
+					repeatState: response.data.repeat_state, // "off", "context", or "track"
+				});
+			}
+		};
+
+		if (token) fetchPlayBackState();
+	}, [token, dispatch]);
+
+	useEffect(() => {
+		const interval = setInterval(async () => {
+			const response = await axios.get("https://api.spotify.com/v1/me/player", {
+				headers: {
+					Authorization: "Bearer " + token,
+				},
+			});
+
+			if (response.data) {
+				dispatch({
+					type: reducerCases.SET_SHUFFLE_STATE,
+					shuffleState: response.data.shuffle_state,
+				});
+				dispatch({
+					type: reducerCases.SET_REPEAT_STATE,
+					repeatState: response.data.repeat_state,
+				});
+			}
+		}, 1000);
+		return () => clearInterval(interval);
+	}, [token, dispatch]);
+
 	return (
 		<Container>
-			<div className="shuffle">
-				<BsShuffle />
+			<div className="shuffle" onClick={toggleShuffle}>
+				<BsShuffle style={{ color: shuffleState ? "#2EDE6D" : "white" }} />
 			</div>
 			<div className="prev">
 				<CgPlayTrackPrev onClick={() => changeTrack("previous")} />
@@ -85,8 +173,16 @@ export default function PlayerControls() {
 			<div className="next">
 				<CgPlayTrackNext onClick={() => changeTrack("next")} />
 			</div>
-			<div className="repeat">
-				<FiRepeat />
+			<div className="repeat" onClick={cycleRepeat}>
+				{repeatState === "track" ? (
+					<BsRepeat1 style={{ color: "#2EDE6D" }} />
+				) : (
+					<FiRepeat
+						style={{
+							color: repeatState !== "off" ? "#2EDE6D" : "white",
+						}}
+					/>
+				)}
 			</div>
 		</Container>
 	);

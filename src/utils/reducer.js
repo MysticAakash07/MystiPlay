@@ -10,6 +10,8 @@ export const initialState = {
 	playerState: false,
 	currentView: "home",
 	volume: 50,
+	shuffleState: false,
+	repeatState: "off",
 };
 
 const reducer = (state, action) => {
@@ -69,6 +71,16 @@ const reducer = (state, action) => {
 				volume: action.volume,
 			};
 		}
+		case reducerCases.SET_SHUFFLE_STATE:
+			return {
+				...state,
+				shuffleState: action.shuffleState,
+			};
+		case reducerCases.SET_REPEAT_STATE:
+			return {
+				...state,
+				repeatState: action.repeatState,
+			};
 		default:
 			return state;
 	}

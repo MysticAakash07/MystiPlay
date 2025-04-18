@@ -12,6 +12,7 @@ export const initialState = {
 	volume: 50,
 	shuffleState: false,
 	repeatState: "off",
+	devices: [],
 };
 
 const reducer = (state, action) => {
@@ -81,6 +82,18 @@ const reducer = (state, action) => {
 				...state,
 				repeatState: action.repeatState,
 			};
+		case reducerCases.SET_DEVICES: {
+			return {
+				...state,
+				devices: action.devices,
+			};
+		}
+		case reducerCases.SET_DEVICE_ID:
+			return {
+				...state,
+				deviceId: action.deviceId,
+			};
+
 		default:
 			return state;
 	}

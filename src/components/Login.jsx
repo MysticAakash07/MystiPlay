@@ -13,9 +13,11 @@ export default function Login() {
 			"user-read-playback-position",
 			"user-top-read",
 			"user-read-recently-played",
+			"streaming",
+			"app-remote-control",
 		];
 		window.location.href = `${apiUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope.join(
-			" "
+			"%20"
 		)}&response_type=token&show_daialog=true`;
 	};
 	return (

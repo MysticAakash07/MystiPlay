@@ -47,8 +47,8 @@ export default function Spotify() {
 
 			if (response.status === 204 || response.data === "") return;
 
-			const { is_playing} = response.data;
-			const {volume_percent} = response.data.device;
+			const { is_playing } = response.data;
+			const { volume_percent } = response.data.device;
 			dispatch({
 				type: reducerCases.SET_PLAYER_STATE,
 				playerState: is_playing,
@@ -58,7 +58,33 @@ export default function Spotify() {
 		getUserInfo();
 	}, [token, dispatch]);
 
-	
+	useEffect(() => {
+		const fetchDevices = async () => {
+			try {
+				const { data } = await axios.get(
+					"https://api.spotify.com/v1/me/player/devices",
+					{
+						headers: {
+							Authorization: "Bearer " + token,
+						},
+					}
+				);
+				dispatch({
+					type: reducerCases.SET_AVAILABLE_DEVICES,
+					devices: data.devices,
+				});
+			} catch (error) {
+				console.error("Error fetching devices", error);
+			}
+		};
+
+		fetchDevices(); 
+
+		const interval = setInterval(fetchDevices, 10000); 
+
+		return () => clearInterval(interval); 
+	}, [token, dispatch]);
+
 	return (
 		<Container>
 			<div className="spotify_body">

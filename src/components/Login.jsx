@@ -12,9 +12,12 @@ export default function Login() {
 			"user-read-currently-playing",
 			"user-read-playback-position",
 			"user-top-read",
+			"user-library-read",
 			"user-read-recently-played",
 			"streaming",
 			"app-remote-control",
+			"user-follow-read",
+			"playlist-read-private",
 		];
 		window.location.href = `${apiUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope.join(
 			"%20"

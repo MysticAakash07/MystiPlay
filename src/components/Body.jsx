@@ -5,6 +5,7 @@ import { useStateProvider } from "../utils/StateProvider";
 import axios from "axios";
 import { reducerCases } from "../utils/Constants";
 import { FaPlay } from "react-icons/fa";
+import Home from "./Home";
 
 export default function Body({ headerBackground }) {
 	const [
@@ -103,7 +104,7 @@ export default function Body({ headerBackground }) {
 	return (
 		<Container headerBackground={headerBackground}>
 			{currentView === "home" ? (
-				<h2 style={{ color: "white", margin: "2rem" }}>Welcome to Home</h2>
+				<Home token={token} />
 			) : (
 				selectedPlaylist && (
 					<>
@@ -285,8 +286,8 @@ const Container = styled.div`
 
 					.play-icon {
 						display: inline-block;
-						opacity: 0; 
-						visibility: hidden; 
+						opacity: 0;
+						visibility: hidden;
 						position: absolute;
 						svg {
 							color: white;
@@ -301,9 +302,9 @@ const Container = styled.div`
 						display: none;
 					}
 					.play-icon {
-						opacity: 1; 
-						visibility: visible; 
-						transition: opacity 0.2s ease, visibility 0s 0s; 
+						opacity: 1;
+						visibility: visible;
+						transition: opacity 0.2s ease, visibility 0s 0s;
 					}
 				}
 

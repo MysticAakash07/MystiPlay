@@ -9,7 +9,7 @@ export default function SideBar() {
 	const [{}, dispatch] = useStateProvider();
 
 	const gotoHome = () => {
-		dispatch({ type: reducerCases.SET_VIEW, currentview: "home" });
+		dispatch({ type: reducerCases.SET_VIEW, currentView: "home" });
 	};
 
 	return (

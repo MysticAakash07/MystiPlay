@@ -1,17 +1,8 @@
 import styled from "styled-components";
 import { IoLibrary } from "react-icons/io5";
-import { MdHomeFilled, MdSearch } from "react-icons/md";
 import Playlists from "./Playlists";
-import { useStateProvider } from "../utils/StateProvider";
-import { reducerCases } from "../utils/Constants";
 
 export default function SideBar() {
-	const [{}, dispatch] = useStateProvider();
-
-	const gotoHome = () => {
-		dispatch({ type: reducerCases.SET_VIEW, currentView: "home" });
-	};
-
 	return (
 		<Container>
 			<div className="top_links">
@@ -21,16 +12,10 @@ export default function SideBar() {
 						alt="spotify"
 					/>
 				</div>
-				<ul>
-					<li onClick={gotoHome}>
-						<MdHomeFilled />
-						<span>Home</span>
-					</li>
-					<li>
-						<IoLibrary />
-						<span>Your Library</span>
-					</li>
-				</ul>
+				<div className="library">
+					<IoLibrary />
+					<span>Your Library</span>
+				</div>
 			</div>
 			<Playlists />
 		</Container>
@@ -56,20 +41,16 @@ const Container = styled.div`
 			block-size: auto;
 		}
 	}
-	ul {
-		list-style-type: none;
+	.library {
 		display: flex;
-		flex-direction: column;
-		gap: 1rem;
+		flex-direction: row;
 		padding: 1rem;
-		li {
-			display: flex;
-			gap: 1rem;
-			cursor: pointer;
-			transition: 0.3s ease-in-out;
-			&:hover {
-				color: white;
-			}
-		}
+		gap: 1rem;
+		align-items: center;
+		cursor: pointer;
+		font-weight: bold;
+		font-size: large;
+		transition: 0.3s ease-in-out;
+		color: white;
 	}
 `;

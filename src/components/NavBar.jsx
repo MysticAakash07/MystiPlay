@@ -1,14 +1,27 @@
 import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
+import { MdHomeFilled } from "react-icons/md";
 import { useStateProvider } from "../utils/StateProvider";
+import { reducerCases } from "../utils/Constants";
+
 export default function NavBar({ navBackground }) {
-	const [{ userInfo }] = useStateProvider();
+	const [{ userInfo }, dispatch] = useStateProvider();
+
+	const gotoHome = () => {
+		dispatch({ type: reducerCases.SET_VIEW, currentView: "home" });
+	};
+
 	return (
 		<Container navBackground={navBackground}>
-			<div className="search__bar">
-				<FaSearch />
-				<input type="text" placeholder="Artists, songs, or Podcasts" />
+			<div className="left">
+				<div onClick={gotoHome} className="home">
+					<MdHomeFilled />
+				</div>
+				<div className="search__bar">
+					<FaSearch />
+					<input type="text" placeholder="Artists, songs, or Podcasts" />
+				</div>
 			</div>
 			<div className="avatar">
 				<a href="">
@@ -33,26 +46,41 @@ const Container = styled.div`
 	box-sizing: border-box;
 	z-index: 10;
 	overflow-x: hidden;
-	.search__bar {
-		background-color: white;
-		width: 30%;
-		padding: 0.4rem 1rem;
-		border-radius: 2rem;
+	.left {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		input {
-			border: none;
-			height: 2rem;
+		gap: .5rem;
+		.home {
+			padding: 1rem;
+			background-color: white;
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 3rem; 
+			width: 3rem; 
+		}
+		.search__bar {
+			background-color: white;
 			width: 100%;
-			&:focus {
-				outline: none;
+			padding: 0.4rem 1rem;
+			border-radius: 2rem;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			input {
+				border: none;
+				height: 2rem;
+				width: 100%;
+				&:focus {
+					outline: none;
+				}
 			}
 		}
 	}
 	.avatar {
 		background-color: black;
-		padding: 0.3rem 0.4rem;
+		padding: 0.3rem 0.5rem;
 		padding-right: 0.5rem;
 		margin-right: 1rem;
 		border-radius: 2rem;
@@ -69,7 +97,7 @@ const Container = styled.div`
 			gap: 0.5rem;
 			font-weight: bold;
 			svg {
-				font-size: 1.3rem;
+				font-size: 1.8rem;
 				background-color: #282828;
 				padding: 0.2rem;
 				border-radius: 1rem;

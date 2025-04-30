@@ -15,7 +15,6 @@ export default function UserTopArtists({ token }) {
 					}
 				);
 				setTopArtists(response.data.items);
-				console.log("Top Artists:", response.data.items);
 			} catch (error) {
 				console.error("Failed to fetch top artists", error);
 			}

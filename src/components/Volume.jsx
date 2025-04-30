@@ -23,7 +23,7 @@ export default function Volume() {
 					volume: response.data.device.volume_percent,
 				});
 			}
-		}, 2000);
+		}, 1000);
 
 		return () => clearInterval(interval);
 	}, [token, dispatch]);

@@ -51,7 +51,7 @@ const Container = styled.div`
 		flex-direction: column;
 		gap: 1rem;
 		padding: 1rem;
-		height: 60vh;
+		height: 66vh;
 		max-height: 100%;
 		overflow: auto;
 		&::-webkit-scrollbar {

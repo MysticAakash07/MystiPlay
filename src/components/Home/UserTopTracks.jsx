@@ -53,7 +53,6 @@ export default function UserTopTracks({ token }) {
 					}
 				);
 				setTopTracks(response.data.items);
-				console.log("Top Tracks:", response.data.items);
 			} catch (error) {
 				console.error("Failed to fetch top Tracks", error);
 			}

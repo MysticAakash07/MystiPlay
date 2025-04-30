@@ -80,7 +80,7 @@ export default function Features() {
 				fetchDevices();
 			}, 3000);
 
-			return () => clearInterval(interval); 
+			return () => clearInterval(interval);
 		}
 	}, [token]);
 
@@ -131,7 +131,9 @@ const Container = styled.div`
 	position: relative;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-end;
+	padding-right: 1rem;
+	gap: 1rem;
 `;
 
 const IconGroup = styled.div`

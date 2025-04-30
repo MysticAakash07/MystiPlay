@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { useStateProvider } from "../utils/StateProvider";
-export default function NavBar({navBackground}) {
+export default function NavBar({ navBackground }) {
 	const [{ userInfo }] = useStateProvider();
 	return (
-		<Container navBackground= {navBackground}>
+		<Container navBackground={navBackground}>
 			<div className="search__bar">
 				<FaSearch />
 				<input type="text" placeholder="Artists, songs, or Podcasts" />
@@ -28,7 +28,11 @@ const Container = styled.div`
 	position: sticky;
 	top: 0;
 	transition: 0.3s ease-in-out;
-	background-color: ${({navBackground})=>navBackground?'rgba(0,0,0,.7)':"none"};
+	background-color: ${({ navBackground }) =>
+		navBackground ? "rgba(0,0,0,.7)" : "none"};
+	box-sizing: border-box;
+	z-index: 10;
+	overflow-x: hidden;
 	.search__bar {
 		background-color: white;
 		width: 30%;

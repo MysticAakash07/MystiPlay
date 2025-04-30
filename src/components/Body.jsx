@@ -210,6 +210,7 @@ const Container = styled.div`
 			img {
 				height: 15rem;
 				box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+				border-radius: 10px;
 			}
 		}
 		.details {
@@ -314,6 +315,11 @@ const Container = styled.div`
 					.info {
 						display: flex;
 						flex-direction: column;
+					}
+					.image {
+						img {
+							border-radius:6px;
+						}
 					}
 				}
 			}

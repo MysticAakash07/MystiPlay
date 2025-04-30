@@ -3,10 +3,10 @@ import styled from "styled-components";
 import UserAlbums from "./Home/UserAlbums";
 import UserPlaylists from "./Home/UserPlaylists";
 import UserTopArtists from "./Home/UserTopArtists";
-import UserTopTracks from "./Home/UserTopTracks";
+import UserTopTracks from "./Home/UserToptracks";
 
 export default function Home({ token }) {
-	const [activeSection, setActiveSection] = useState("artists");
+	const [activeSection, setActiveSection] = useState("playlists");
 	return (
 		<Container>
 			<Buttons>
@@ -72,4 +72,5 @@ const Button = styled.div`
 		border: 2px solid white;
 	}
 `;
-const Content = styled.div``;
+const Content = styled.div`
+`;

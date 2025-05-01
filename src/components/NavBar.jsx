@@ -45,7 +45,6 @@ const Container = styled.div`
 		navBackground ? "rgba(0,0,0,.7)" : "none"};
 	box-sizing: border-box;
 	z-index: 10;
-	overflow-x: hidden;
 	.left {
 		display: flex;
 		align-items: center;

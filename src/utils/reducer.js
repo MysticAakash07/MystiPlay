@@ -5,10 +5,11 @@ export const initialState = {
 	playlists: [],
 	userInfo: null,
 	selectedPlaylistId: "1W0wGJ9I2oJ1WKxqSpKPbE",
+	selectedAlbum: null,
 	selectedPlaylist: null,
 	currentlyPlaying: null,
 	playerState: false,
-	currentView: "home",
+	currentView: "playlist",
 	volume: 50,
 	shuffleState: false,
 	repeatState: "off",
@@ -93,7 +94,11 @@ const reducer = (state, action) => {
 				...state,
 				deviceId: action.deviceId,
 			};
-
+		case reducerCases.SET_ALBUM:
+			return {
+				...state,
+				selectedAlbum: action.selectedAlbum,
+			};
 		default:
 			return state;
 	}

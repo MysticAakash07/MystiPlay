@@ -1,9 +1,38 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { useStateProvider } from "../../utils/StateProvider";
+import { reducerCases } from "../../utils/Constants";
 
-export default function UserPlaylists({ token }) {
-	const [playlists, setPlaylists] = useState([]);
+export default function UserPlaylists({token}) {
+	const [userPlaylists, setPlaylists] = useState([]);
+
+	const [,dispatch] = useStateProvider();
+	useEffect(() => {
+		const getPlaylistData = async () => {
+			const response = await axios.get(
+				"https://api.spotify.com/v1/me/playlists",
+				{
+					headers: {
+						Authorization: "Bearer " + token,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			const { items } = response.data;
+			const playlists = items.map(({ name, id }) => {
+				return { name, id };
+			});
+
+			dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
+		};
+		getPlaylistData();
+	}, [token, dispatch]);
+
+	const changeCurrentPlaylist = (selectedPlaylistId) => {
+		dispatch({ type: reducerCases.SET_PLAYLIST_ID, selectedPlaylistId });
+		dispatch({ type: reducerCases.SET_VIEW, currentView: "playlist" });
+	};
 
 	useEffect(() => {
 		const fetchPlaylists = async () => {
@@ -28,8 +57,11 @@ export default function UserPlaylists({ token }) {
 
 	return (
 		<PlaylistGrid>
-			{playlists.map((playlist) => (
-				<PlaylistCard key={playlist.id}>
+			{userPlaylists.map((playlist) => (
+				<PlaylistCard
+					key={playlist.id}
+					onClick={() => changeCurrentPlaylist(playlist.id)}
+				>
 					<img src={playlist.images[0]?.url} alt={playlist.name} />
 					<h4>{playlist.name}</h4>
 				</PlaylistCard>
@@ -54,7 +86,7 @@ const PlaylistCard = styled.div`
 	border-radius: 20px;
 	overflow: hidden;
 	width: fit-content;
-
+	transition: background-color .3s;
 	img {
 		width: 175px;
 		height: 175px;
@@ -70,5 +102,10 @@ const PlaylistCard = styled.div`
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+		cursor: default;
+	}
+
+	&:hover {
+		background-color: rgba(47, 48, 47, 0.5);
 	}
 `;

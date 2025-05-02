@@ -12,7 +12,7 @@ export default function Body({ headerBackground }) {
 			{currentView === "playlist" && (
 				<Playlist headerBackground={headerBackground} />
 			)}
-			{currentView === "album" && <Album />}
+			{currentView === "album" && <Album headerBackground={headerBackground} />}
 		</div>
 	);
 }

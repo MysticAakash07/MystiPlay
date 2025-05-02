@@ -48,6 +48,7 @@ export default function UserAlbums({ token }) {
 				image: album.images[0]?.url,
 				artists: album.artists.map((artist) => artist.name).join(", "),
 				total_tracks: album.total_tracks,
+				release_date: album.release_date,
 				tracks: album.tracks.items.map((track, index) => ({
 					id: track.id,
 					index,

@@ -3,10 +3,11 @@ import axios from "axios";
 import styled from "styled-components";
 import { useStateProvider } from "../../utils/StateProvider";
 import { reducerCases } from "../../utils/Constants";
+import { msToHourMin } from "../../utils/Constants";
 
 export default function UserAlbums({ token }) {
 	const [albums, setAlbums] = useState([]);
-	const [,dispatch] = useStateProvider();
+	const [, dispatch] = useStateProvider();
 
 	useEffect(() => {
 		const fetchalbums = async () => {
@@ -42,6 +43,12 @@ export default function UserAlbums({ token }) {
 			);
 
 			const album = response.data;
+
+			const totalDurationMs = album.tracks.items.reduce(
+				(total, track) => total + track.duration_ms,
+				0
+			);
+
 			const albumData = {
 				id: album.id,
 				name: album.name,
@@ -49,6 +56,8 @@ export default function UserAlbums({ token }) {
 				artists: album.artists.map((artist) => artist.name).join(", "),
 				total_tracks: album.total_tracks,
 				release_date: album.release_date,
+				uri: album.uri,
+				duration: msToHourMin(totalDurationMs),
 				tracks: album.tracks.items.map((track, index) => ({
 					id: track.id,
 					index,
@@ -68,11 +77,13 @@ export default function UserAlbums({ token }) {
 		}
 	};
 
-
 	return (
 		<AlbumGrid>
 			{albums.map((alb, idx) => (
-				<AlbumCard key={alb.album.id} onClick={() => changeCurrentAlbum(alb.album.id)}>
+				<AlbumCard
+					key={alb.album.id}
+					onClick={() => changeCurrentAlbum(alb.album.id)}
+				>
 					<img src={alb.album.images[0]?.url} alt={alb.album.name} />
 					<h4>{alb.album.name}</h4>
 				</AlbumCard>

@@ -67,3 +67,15 @@ export const playTrack = async (
 	}
 };
 
+export const msToHourMin = (ms) => {
+	const totalMinutes = Math.floor(ms / 60000);
+	const hours = Math.floor(totalMinutes / 60);
+	const minutes = totalMinutes % 60;
+
+	if (hours > 0) {
+		return `${hours} hr ${minutes} min`;
+	} else {
+		return `${minutes} min`;
+	}
+};
+

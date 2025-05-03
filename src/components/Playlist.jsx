@@ -5,6 +5,7 @@ import {
 	reducerCases,
 	mstoMinutesAndSeconds,
 	playTrack,
+	msToHourMin,
 } from "../utils/Constants";
 import { useStateProvider } from "../utils/StateProvider";
 import { AiFillClockCircle } from "react-icons/ai";
@@ -16,50 +17,76 @@ export default function Playlist({ headerBackground }) {
 
 	useEffect(() => {
 		const getInitialPlaylist = async () => {
-			const response = await axios.get(
-				`https://api.spotify.com/v1/playlists/${selectedPlaylistId}`,
-				{
-					headers: {
-						Authorization: "Bearer " + token,
-						"Content-Type": "application/json",
-					},
-				}
-			);
+			try {
+				const baseUrl = `https://api.spotify.com/v1/playlists/${selectedPlaylistId}`;
+				const headers = {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				};
 
-			const ownerId = response.data.owner.id;
-			const ownerResponse = await axios.get(
-				`https://api.spotify.com/v1/users/${ownerId}`,
-				{
-					headers: { Authorization: `Bearer ${token}` },
-				}
-			);
+				// First request to get metadata and total tracks
+				const initialResponse = await axios.get(baseUrl, { headers });
+				const totalTracks = initialResponse.data.tracks.total;
+				const ownerId = initialResponse.data.owner.id;
 
-			const selectedPlaylist = {
-				id: response.data.id,
-				name: response.data.name,
-				description: response.data.description.startsWith("<a")
-					? ""
-					: response.data.description,
-				image: response.data.images[0].url,
-				owner: response.data.owner.display_name,
-				owner_id: response.data.owner.id,
-				owner_image: ownerResponse.data.images?.[0]?.url || "",
-				total_songs: response.data.tracks.total,
-				uri: response.data.uri,
-				tracks: response.data.tracks.items.map(({ track }, index) => ({
-					id: track.id,
-					name: track.name,
-					index,
-					artists: track.artists.map((artist) => artist.name),
-					image: track.album.images[2].url,
-					duration: track.duration_ms,
-					album: track.album.name,
-					context_uri: track.album.uri,
-					track_number: track.track_number,
-				})),
-			};
-			dispatch({ type: reducerCases.SET_PLAYLIST, selectedPlaylist });
+				// Fetch all tracks using pagination
+				let allTracks = [];
+				let offset = 0;
+				const limit = 100;
+
+				while (offset < totalTracks) {
+					const trackResponse = await axios.get(
+						`${baseUrl}/tracks?offset=${offset}&limit=${limit}`,
+						{ headers }
+					);
+					allTracks = allTracks.concat(trackResponse.data.items);
+					offset += limit;
+				}
+
+				// Get owner details
+				const ownerResponse = await axios.get(
+					`https://api.spotify.com/v1/users/${ownerId}`,
+					{ headers }
+				);
+
+				// Calculate total duration
+				const totalDurationMs = allTracks.reduce(
+					(total, item) => total + (item.track?.duration_ms || 0),
+					0
+				);
+
+				const selectedPlaylist = {
+					id: initialResponse.data.id,
+					name: initialResponse.data.name,
+					description: initialResponse.data.description.startsWith("<a")
+						? ""
+						: initialResponse.data.description,
+					image: initialResponse.data.images[0].url,
+					owner: initialResponse.data.owner.display_name,
+					owner_id: ownerId,
+					owner_image: ownerResponse.data.images?.[0]?.url || "",
+					total_songs: totalTracks,
+					uri: initialResponse.data.uri,
+					duration: msToHourMin(totalDurationMs),
+					tracks: allTracks.map(({ track }, index) => ({
+						id: track.id,
+						name: track.name,
+						index,
+						artists: track.artists.map((artist) => artist.name),
+						image: track.album.images[2]?.url,
+						duration: track.duration_ms,
+						album: track.album.name,
+						context_uri: track.album.uri,
+						track_number: track.track_number,
+					})),
+				};
+
+				dispatch({ type: reducerCases.SET_PLAYLIST, selectedPlaylist });
+			} catch (err) {
+				console.error("Failed to load full playlist:", err);
+			}
 		};
+
 		getInitialPlaylist();
 	}, [token, dispatch, selectedPlaylistId]);
 
@@ -87,6 +114,9 @@ export default function Playlist({ headerBackground }) {
 						</a>
 						<span>
 							<b>·</b> {selectedPlaylist.total_songs} songs
+						</span>
+						<span>
+							<b>·</b> {selectedPlaylist.duration}
 						</span>
 					</div>
 				</div>
@@ -173,16 +203,20 @@ const Container = styled.div`
 			}
 		}
 		.details {
+			max-height: 15rem;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
 			color: #e0dede;
+			overflow: hidden;
 			.title {
 				color: white;
 				font-size: 4rem;
+				line-height: 0.8;
+				margin: 1rem 0;
 			}
 			.playlistDetails {
-				margin: 0.6rem 0;
+				margin: 1rem 0;
 				display: flex;
 				align-items: center;
 				gap: 0.5rem;

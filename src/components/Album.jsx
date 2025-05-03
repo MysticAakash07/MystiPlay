@@ -16,6 +16,7 @@ export default function Album({ headerBackground }) {
 					<img src={selectedAlbum.image} alt={selectedAlbum.name} />
 				</div>
 				<div className="details">
+					<span className="type">ALBUM</span>
 					<h1 className="title">{selectedAlbum.name}</h1>
 					<div className="albumDetails">
 						<span>By</span>
@@ -26,6 +27,9 @@ export default function Album({ headerBackground }) {
 						</span>
 						<span>
 							<b> · </b> {selectedAlbum.total_tracks} songs
+						</span>
+						<span>
+							<b> · </b> {selectedAlbum.duration}
 						</span>
 					</div>
 				</div>
@@ -111,13 +115,14 @@ const AlbumContainer = styled.div`
 			}
 		}
 		.details {
+			max-height: 18rem;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
 			color: #e0dede;
 			.title {
 				color: white;
-				font-size: 4rem;
+				font-size: 3rem;
 			}
 			.albumDetails {
 				margin: 0.6rem 0;

@@ -4,12 +4,33 @@ import { CgProfile } from "react-icons/cg";
 import { MdHomeFilled } from "react-icons/md";
 import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
+import { useState } from "react";
 
 export default function NavBar({ navBackground }) {
-	const [{ userInfo }, dispatch] = useStateProvider();
+	const [{ userInfo, token }, dispatch] = useStateProvider();
+	const [query, setQuery] = useState("");
 
 	const gotoHome = () => {
 		dispatch({ type: reducerCases.SET_VIEW, currentView: "home" });
+	};
+
+	const handleSearch = async (e) => {
+		if (e.key === "Enter" && query.trim() !== "") {
+			const response = await fetch(
+				`https://api.spotify.com/v1/search?q=${encodeURIComponent(
+					query
+				)}&type=album,playlist,track,artist&limit=10`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			const data = await response.json();
+			console.log(data);
+			dispatch({ type: reducerCases.SET_SEARCH_RESULTS, searchResults: data });
+			dispatch({ type: reducerCases.SET_VIEW, currentView: "search" });
+		}
 	};
 
 	return (
@@ -20,7 +41,13 @@ export default function NavBar({ navBackground }) {
 				</div>
 				<div className="search__bar">
 					<FaSearch />
-					<input type="text" placeholder="Artists, songs, or Podcasts" />
+					<input
+						type="text"
+						placeholder="Artists, songs, or Podcasts"
+						value={query}
+						onChange={(e) => setQuery(e.target.value)}
+						onKeyDown={handleSearch}
+					/>
 				</div>
 			</div>
 			<div className="avatar">
@@ -48,7 +75,7 @@ const Container = styled.div`
 	.left {
 		display: flex;
 		align-items: center;
-		gap: .5rem;
+		gap: 0.5rem;
 		.home {
 			padding: 1rem;
 			background-color: white;
@@ -56,8 +83,8 @@ const Container = styled.div`
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 3rem; 
-			width: 3rem; 
+			height: 3rem;
+			width: 3rem;
 		}
 		.search__bar {
 			background-color: white;

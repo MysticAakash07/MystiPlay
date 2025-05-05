@@ -15,6 +15,9 @@ export default function Playlist({ headerBackground }) {
 	const [{ token, selectedPlaylistId, selectedPlaylist }, dispatch] =
 		useStateProvider();
 
+	console.log("Playlist View Mounted");
+	console.log("selectedPlaylistId:", selectedPlaylistId);
+
 	useEffect(() => {
 		const getInitialPlaylist = async () => {
 			try {

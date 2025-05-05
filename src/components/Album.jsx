@@ -52,7 +52,7 @@ export default function Album({ headerBackground }) {
 			</HeaderRow>
 			<div className="tracks">
 				{selectedAlbum.tracks.map(
-					({ id, index, name, artists, image, duration, album, uri }) => (
+					({ id, index, name, artists, image, duration, album }) => (
 						<div
 							key={id}
 							className="row"
@@ -96,9 +96,6 @@ export default function Album({ headerBackground }) {
 			</div>
 		</AlbumContainer>
 	);
-}
-
-{
 }
 
 const AlbumContainer = styled.div`

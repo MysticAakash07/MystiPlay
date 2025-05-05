@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { useStateProvider } from "../../utils/StateProvider";
 import { reducerCases } from "../../utils/Constants";
 
-export default function UserPlaylists({token}) {
+export default function UserPlaylists({ token }) {
 	const [userPlaylists, setPlaylists] = useState([]);
 
-	const [,dispatch] = useStateProvider();
+	const [, dispatch] = useStateProvider();
 	useEffect(() => {
 		const getPlaylistData = async () => {
 			const response = await axios.get(
@@ -44,7 +44,6 @@ export default function UserPlaylists({token}) {
 					}
 				);
 				setPlaylists(response.data.items);
-				console.log("User Playlists:", response.data.items);
 			} catch (error) {
 				console.error("Failed to fetch user playlists", error);
 			}
@@ -86,7 +85,7 @@ const PlaylistCard = styled.div`
 	border-radius: 20px;
 	overflow: hidden;
 	width: fit-content;
-	transition: background-color .3s;
+	transition: background-color 0.3s;
 	img {
 		width: 175px;
 		height: 175px;

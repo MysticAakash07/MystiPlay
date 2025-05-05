@@ -10,6 +10,7 @@ export const initialState = {
 	currentlyPlaying: null,
 	playerState: false,
 	currentView: "playlist",
+	searchResults: null,
 	volume: 50,
 	shuffleState: false,
 	repeatState: "off",
@@ -99,6 +100,12 @@ const reducer = (state, action) => {
 				...state,
 				selectedAlbum: action.selectedAlbum,
 			};
+		case reducerCases.SET_SEARCH_RESULTS: {
+			return {
+				...state,
+				searchResults: action.searchResults,
+			};
+		}
 		default:
 			return state;
 	}

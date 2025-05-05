@@ -1,73 +1,87 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Login from "./components/Login";
+import Spotify from "./components/Spotify";
 import { useStateProvider } from "./utils/StateProvider";
 import { reducerCases } from "./utils/Constants";
-import Spotify from "./components/Spotify";
 
 export default function App() {
 	const [{ token }, dispatch] = useStateProvider();
+	const [playerInitialized, setPlayerInitialized] = useState(false);
 
+	// Extract token from URL on first load
 	useEffect(() => {
 		const hash = window.location.hash;
 		if (hash) {
-			const token = hash.substring(1).split("&")[0].split("=")[1];
-			dispatch({ type: reducerCases.SET_TOKEN, token });
+			const _token = hash.substring(1).split("&")[0].split("=")[1];
+			dispatch({ type: reducerCases.SET_TOKEN, token: _token });
+			window._spotifyToken = _token; // store globally for SDK
+			window.location.hash = ""; // clear hash
 		}
-	}, [token, dispatch]);
+	}, [dispatch]);
 
+	// Ensure global token is always available
 	useEffect(() => {
-		const fetchDevices = async () => {
-			try {
-				if (token) {
-					window.onSpotifyWebPlaybackSDKReady = async () => {
-						const player = new window.Spotify.Player({
-							name: "MysticAakash Web Player 🎧",
-							getOAuthToken: (cb) => cb(token),
-							volume: 0.5,
-						});
+		if (token) {
+			window._spotifyToken = token;
+		}
+	}, [token]);
 
-						player.addListener("ready", async ({ device_id }) => {
-							try {
-								console.log("Ready with Device ID", device_id);
-								dispatch({
-									type: reducerCases.SET_DEVICE_ID,
-									deviceId: device_id,
-								});
+	// Setup Spotify SDK script and playback logic
+	useEffect(() => {
+		if (!token || playerInitialized) return;
 
-								await fetch("https://api.spotify.com/v1/me/player", {
-									method: "PUT",
-									headers: {
-										Authorization: `Bearer ${token}`,
-										"Content-Type": "application/json",
-									},
-									body: JSON.stringify({
-										device_ids: [device_id],
-										play: false, // Set to true to auto-play last context
-									}),
-								});
-							} catch (error) {
-								console.error("Error in ready event listener:", error);
-							}
-						});
+		// Define SDK callback BEFORE script loads
+		window.onSpotifyWebPlaybackSDKReady = () => {
+			const player = new window.Spotify.Player({
+				name: "MysticAakash Web Player 🎧",
+				getOAuthToken: (cb) => cb(window._spotifyToken),
+				volume: 0.5,
+			});
 
-						player.addListener("not_ready", ({ device_id }) => {
-							console.log("Device ID has gone offline", device_id);
-						});
+			player.addListener("ready", async ({ device_id }) => {
+				console.log("Ready with Device ID", device_id);
+				dispatch({
+					type: reducerCases.SET_DEVICE_ID,
+					deviceId: device_id,
+				});
 
-						try {
-							await player.connect();
-						} catch (error) {
-							console.error("Error during player connection:", error);
-						}
-					};
+				try {
+					await fetch("https://api.spotify.com/v1/me/player", {
+						method: "PUT",
+						headers: {
+							Authorization: `Bearer ${window._spotifyToken}`,
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							device_ids: [device_id],
+							play: true,
+						}),
+					});
+				} catch (err) {
+					console.error("Error transferring playback:", err);
 				}
-			} catch (error) {
-				console.error("Error in fetching devices or SDK setup:", error);
-			}
+			});
+
+			player.addListener("not_ready", ({ device_id }) => {
+				console.log("Device ID has gone offline", device_id);
+			});
+
+			player.connect();
+			setPlayerInitialized(true);
 		};
 
-		fetchDevices();
-	}, [token, dispatch]);
+		// Load the SDK script if not already present
+		if (!document.getElementById("spotify-sdk")) {
+			const script = document.createElement("script");
+			script.id = "spotify-sdk";
+			script.src = "https://sdk.scdn.co/spotify-player.js";
+			script.async = true;
+			document.body.appendChild(script);
+		} else if (window.Spotify) {
+			// SDK already loaded; manually trigger the callback
+			window.onSpotifyWebPlaybackSDKReady();
+		}
+	}, [token, dispatch, playerInitialized]);
 
 	return <div>{token ? <Spotify /> : <Login />}</div>;
 }

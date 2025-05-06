@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import UserAlbums from "./Home/UserAlbums";
-import UserPlaylists from "./Home/UserPlaylists";
-import UserTopArtists from "./Home/UserTopArtists";
-import UserTopTracks from "./Home/UserToptracks";
+import UserAlbums from "./Home/UserAlbums.jsx";
+import UserPlaylists from "./Home/UserPlaylists.jsx";
+import UserTopArtists from "./Home/UserTopArtists.jsx";
+import UserTopTracks from "./Home/UserToptracks.jsx";
 
 export default function Home({ token }) {
 	const [activeSection, setActiveSection] = useState("playlists");

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import UserAlbums from "./Home/UserAlbums.jsx";
 import UserPlaylists from "./Home/UserPlaylists.jsx";
 import UserTopArtists from "./Home/UserTopArtists.jsx";
-import UserTopTracks from "./Home/UserToptracks.jsx";
+import UserTopTracks from "./Home/UserTopTracks.jsx";
 
 export default function Home({ token }) {
 	const [activeSection, setActiveSection] = useState("playlists");

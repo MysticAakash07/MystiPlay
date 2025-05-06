@@ -3,7 +3,7 @@ export default function Login() {
 	const handleClick = () => {
 		const clientId = "eaba786aaaac4ba9893ac34f40b638b0";
 		const redirectUrl = import.meta.env.PROD
-			? "https://your-app-name.vercel.app/"
+			? "https://mystiplay.vercel.app/"
 			: "http://localhost:5173/";
 		const apiUrl = "https://accounts.spotify.com/authorize";
 		const scope = [

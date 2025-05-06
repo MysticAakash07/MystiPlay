@@ -2,7 +2,9 @@ import styled from "styled-components";
 export default function Login() {
 	const handleClick = () => {
 		const clientId = "eaba786aaaac4ba9893ac34f40b638b0";
-		const redirectUrl = "http://localhost:5173/";
+		const redirectUri = import.meta.env.PROD
+			? "https://your-app-name.vercel.app/"
+			: "http://localhost:5173/";
 		const apiUrl = "https://accounts.spotify.com/authorize";
 		const scope = [
 			"user-read-email",

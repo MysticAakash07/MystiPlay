@@ -34,7 +34,7 @@ export default function UserAlbums({ token }) {
 			{albums.map((alb, idx) => (
 				<AlbumCard
 					key={alb.album.id}
-					onClick={() => fetchAndSetAlbum(alb.album.id)}
+					onClick={() => fetchAndSetAlbum(alb.album.id, token, dispatch)}
 				>
 					<img src={alb.album.images[0]?.url} alt={alb.album.name} />
 					<h4>{alb.album.name}</h4>
@@ -54,13 +54,13 @@ const AlbumCard = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background-color: rgba(47, 48, 47, 0.8);
+	background-color: rgba(255, 255, 255, 0.1);
 	color: white;
 	padding: 1rem;
 	border-radius: 20px;
 	overflow: hidden;
 	width: fit-content;
-
+	transition: background 0.3s;
 	img {
 		width: 175px;
 		height: 175px;
@@ -76,5 +76,9 @@ const AlbumCard = styled.div`
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+	}
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.2);
 	}
 `;

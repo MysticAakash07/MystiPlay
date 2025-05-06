@@ -15,6 +15,7 @@ export const reducerCases = {
 	SET_DEVICE_ID: "SET_DEVICE_ID",
 	SET_ALBUM: "SET_ALBUM",
 	SET_SEARCH_RESULTS: "SET_SEARCH_RESULTS",
+	SET_ARTIST_ID: "SET_ARTIST_ID",
 };
 
 export const mstoMinutesAndSeconds = (ms) => {
@@ -79,5 +80,3 @@ export const msToHourMin = (ms) => {
 		return `${minutes} min`;
 	}
 };
-
-

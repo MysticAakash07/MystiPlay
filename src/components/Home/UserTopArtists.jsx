@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { useStateProvider } from "../../utils/StateProvider";
+import { reducerCases } from "../../utils/Constants";
 
 export default function UserTopArtists({ token }) {
+	const [, dispatch] =  useStateProvider();
 	const [topArtists, setTopArtists] = useState([]);
 
 	useEffect(() => {
@@ -27,9 +30,21 @@ export default function UserTopArtists({ token }) {
 	return (
 		<ArtistGrid>
 			{topArtists.map((artist, idx) => (
-				<ArtistCard key={artist.id}>
+				<ArtistCard
+					key={artist.id}
+					onClick={() => {
+						dispatch({
+							type: reducerCases.SET_ARTIST_ID,
+							selectedArtistId: artist.id,
+						});
+						dispatch({ type: reducerCases.SET_VIEW, currentView: "artist" });
+					}}
+				>
 					<img src={artist.images[0]?.url} alt={artist.name} />
-					<h4> #{idx +1} {artist.name}</h4>
+					<h4>
+						{" "}
+						#{idx + 1} {artist.name}
+					</h4>
 				</ArtistCard>
 			))}
 		</ArtistGrid>

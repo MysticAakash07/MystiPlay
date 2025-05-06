@@ -6,10 +6,11 @@ export const initialState = {
 	userInfo: null,
 	selectedPlaylistId: "1W0wGJ9I2oJ1WKxqSpKPbE",
 	selectedAlbum: null,
+	selectedArtistId: "0hEurMDQu99nJRq8pTxO14",
 	selectedPlaylist: null,
 	currentlyPlaying: null,
 	playerState: false,
-	currentView: "playlist",
+	currentView: "artist",
 	searchResults: null,
 	volume: 50,
 	shuffleState: false,
@@ -104,6 +105,12 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				searchResults: action.searchResults,
+			};
+		}
+		case reducerCases.SET_ARTIST_ID: {
+			return {
+				...state,
+				selectedArtistId: action.selectedArtistId,
 			};
 		}
 		default:

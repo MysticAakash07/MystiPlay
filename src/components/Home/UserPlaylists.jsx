@@ -79,7 +79,7 @@ const PlaylistCard = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background-color: rgba(47, 48, 47, 0.8);
+	background-color: rgba(255, 255, 255, 0.1);
 	color: white;
 	padding: 1rem;
 	border-radius: 20px;
@@ -105,6 +105,6 @@ const PlaylistCard = styled.div`
 	}
 
 	&:hover {
-		background-color: rgba(47, 48, 47, 0.5);
+		background-color: rgba(255, 255, 255, 0.2);
 	}
 `;

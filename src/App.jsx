@@ -7,10 +7,9 @@ import setFavicon from "./utils/setFavicon";
 
 export default function App() {
 	const [{ token }, dispatch] = useStateProvider();
-	const [playerInitialized, setPlayerInitialized] = useState(false);
+	const [player, setPlayer] = useState(null);
 
 	// Set Favicon Based on Light/Dark Mode
-
 	useEffect(() => {
 		setFavicon();
 	}, []);
@@ -35,17 +34,22 @@ export default function App() {
 
 	// Setup Spotify SDK script and playback logic
 	useEffect(() => {
-		if (!token || playerInitialized) return;
+		if (!token || player) return; // Prevent multiple initializations
 
-		// Define SDK callback BEFORE script loads
 		window.onSpotifyWebPlaybackSDKReady = () => {
-			const player = new window.Spotify.Player({
+			// Check if a player instance already exists
+			if (player) {
+				console.log("Player already initialized");
+				return;
+			}
+
+			const newPlayer = new window.Spotify.Player({
 				name: "MysticAakash Web Player 🎧",
 				getOAuthToken: (cb) => cb(window._spotifyToken),
 				volume: 0.5,
 			});
 
-			player.addListener("ready", async ({ device_id }) => {
+			newPlayer.addListener("ready", async ({ device_id }) => {
 				console.log("Ready with Device ID", device_id);
 				dispatch({
 					type: reducerCases.SET_DEVICE_ID,
@@ -69,34 +73,30 @@ export default function App() {
 				}
 			});
 
-			player.addListener("not_ready", ({ device_id }) => {
+			newPlayer.addListener("not_ready", ({ device_id }) => {
 				console.log("Device ID has gone offline", device_id);
 			});
 
-			player.addListener("account_error", ({ message }) => {
+			newPlayer.addListener("account_error", ({ message }) => {
 				console.error("Account Error:", message);
-				alert(
-					"Playback requires a Spotify Premium account. Upgrade to Premium to enable playback."
-				);
 			});
 
-			player.addListener("authentication_error", ({ message }) => {
+			newPlayer.addListener("authentication_error", ({ message }) => {
 				console.error("Authentication Error:", message);
 			});
 
-			player.addListener("initialization_error", ({ message }) => {
+			newPlayer.addListener("initialization_error", ({ message }) => {
 				console.error("Initialization Error:", message);
 			});
 
-			player.addListener("playback_error", ({ message }) => {
+			newPlayer.addListener("playback_error", ({ message }) => {
 				console.error("Playback Error:", message);
 			});
 
-			player.connect();
-			setPlayerInitialized(true);
+			newPlayer.connect();
+			setPlayer(newPlayer); 
 		};
 
-		// Load the SDK script if not already present
 		if (!document.getElementById("spotify-sdk")) {
 			const script = document.createElement("script");
 			script.id = "spotify-sdk";
@@ -104,10 +104,9 @@ export default function App() {
 			script.async = true;
 			document.body.appendChild(script);
 		} else if (window.Spotify) {
-			// SDK already loaded; manually trigger the callback
 			window.onSpotifyWebPlaybackSDKReady();
 		}
-	}, [token, dispatch, playerInitialized]);
+	}, [token, player, dispatch]);
 
 	return <div>{token ? <Spotify /> : <Login />}</div>;
 }

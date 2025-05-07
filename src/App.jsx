@@ -3,10 +3,17 @@ import Login from "./components/Login";
 import Spotify from "./components/Spotify";
 import { useStateProvider } from "./utils/StateProvider";
 import { reducerCases } from "./utils/Constants";
+import setFavicon from "./utils/setFavicon";
 
 export default function App() {
 	const [{ token }, dispatch] = useStateProvider();
 	const [playerInitialized, setPlayerInitialized] = useState(false);
+
+	// Set Favicon Based on Light/Dark Mode
+
+	useEffect(() => {
+		setFavicon();
+	}, []);
 
 	// Extract token from URL on first load
 	useEffect(() => {
@@ -54,7 +61,7 @@ export default function App() {
 						},
 						body: JSON.stringify({
 							device_ids: [device_id],
-							play: true,
+							play: false,
 						}),
 					});
 				} catch (err) {
@@ -64,6 +71,25 @@ export default function App() {
 
 			player.addListener("not_ready", ({ device_id }) => {
 				console.log("Device ID has gone offline", device_id);
+			});
+
+			player.addListener("account_error", ({ message }) => {
+				console.error("Account Error:", message);
+				alert(
+					"Playback requires a Spotify Premium account. Upgrade to Premium to enable playback."
+				);
+			});
+
+			player.addListener("authentication_error", ({ message }) => {
+				console.error("Authentication Error:", message);
+			});
+
+			player.addListener("initialization_error", ({ message }) => {
+				console.error("Initialization Error:", message);
+			});
+
+			player.addListener("playback_error", ({ message }) => {
+				console.error("Playback Error:", message);
 			});
 
 			player.connect();

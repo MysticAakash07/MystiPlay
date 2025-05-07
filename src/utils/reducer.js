@@ -10,7 +10,7 @@ export const initialState = {
 	selectedPlaylist: null,
 	currentlyPlaying: null,
 	playerState: false,
-	currentView: "artist",
+	currentView: "home",
 	searchResults: null,
 	volume: 50,
 	shuffleState: false,

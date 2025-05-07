@@ -6,27 +6,62 @@ import { reducerCases } from "../../utils/Constants";
 
 export default function UserPlaylists({ token }) {
 	const [userPlaylists, setPlaylists] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [defaultPlaylist, setDefaultPlaylist] = useState(null);
 
-	const [, dispatch] = useStateProvider();
+	const [{ selectedPlaylistId }, dispatch] = useStateProvider();
+
 	useEffect(() => {
 		const getPlaylistData = async () => {
-			const response = await axios.get(
-				"https://api.spotify.com/v1/me/playlists",
-				{
-					headers: {
-						Authorization: "Bearer " + token,
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			const { items } = response.data;
-			const playlists = items.map(({ name, id }) => {
-				return { name, id };
-			});
+			setLoading(true);
+			try {
+				const response = await axios.get(
+					"https://api.spotify.com/v1/me/playlists",
+					{
+						headers: {
+							Authorization: "Bearer " + token,
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				const { items } = response.data;
+				const playlists = items.map(({ name, id, images }) => {
+					return { name, id, images };
+				});
 
-			dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
+				dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
+				setPlaylists(playlists);
+			} catch (error) {
+				console.error("Failed to fetch user playlists", error);
+			} finally {
+				setLoading(false);
+			}
 		};
-		getPlaylistData();
+
+		const getDefaultPlaylist = async () => {
+			try {
+				const response = await axios.get(
+					`https://api.spotify.com/v1/playlists/${selectedPlaylistId}`,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
+
+				const { name, images } = response.data;
+				setDefaultPlaylist({
+					name,
+					image: images[0]?.url,
+				});
+			} catch (error) {
+				console.error("Failed to fetch default playlist", error);
+			}
+		};
+		if (token) {
+			getPlaylistData();
+			getDefaultPlaylist();
+		}
 	}, [token, dispatch]);
 
 	const changeCurrentPlaylist = (selectedPlaylistId) => {
@@ -34,25 +69,23 @@ export default function UserPlaylists({ token }) {
 		dispatch({ type: reducerCases.SET_VIEW, currentView: "playlist" });
 	};
 
-	useEffect(() => {
-		const fetchPlaylists = async () => {
-			try {
-				const response = await axios.get(
-					"https://api.spotify.com/v1/me/playlists",
-					{
-						headers: { Authorization: `Bearer ${token}` },
-					}
-				);
-				setPlaylists(response.data.items);
-			} catch (error) {
-				console.error("Failed to fetch user playlists", error);
-			}
-		};
+	// If playlists are empty and not loading, show default playlist
+	if (loading) {
+		return <LoadingMessage>Loading playlists...</LoadingMessage>;
+	}
 
-		if (token) {
-			fetchPlaylists();
-		}
-	}, [token]);
+	if (userPlaylists.length === 0 && defaultPlaylist) {
+		return (
+			<PlaylistGrid>
+				<DefaultPlaylistCard
+					onClick={() => changeCurrentPlaylist(selectedPlaylistId)}
+				>
+					<img src={defaultPlaylist.image} alt={defaultPlaylist.name} />
+					<h4>{defaultPlaylist.name}</h4>
+				</DefaultPlaylistCard>
+			</PlaylistGrid>
+		);
+	}
 
 	return (
 		<PlaylistGrid>
@@ -75,6 +108,7 @@ const PlaylistGrid = styled.div`
 	flex-wrap: wrap;
 	justify-content: center;
 `;
+
 const PlaylistCard = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -86,6 +120,7 @@ const PlaylistCard = styled.div`
 	overflow: hidden;
 	width: fit-content;
 	transition: background-color 0.3s;
+
 	img {
 		width: 175px;
 		height: 175px;
@@ -97,7 +132,6 @@ const PlaylistCard = styled.div`
 		width: 175px;
 		margin-top: 0.5rem;
 		font-size: 1rem;
-		// Comment the 3 lines below for full playlist name
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
@@ -107,4 +141,36 @@ const PlaylistCard = styled.div`
 	&:hover {
 		background-color: rgba(255, 255, 255, 0.2);
 	}
+`;
+
+const DefaultPlaylistCard = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: white;
+	padding: 1rem;
+	border-radius: 20px;
+	overflow: hidden;
+	width: fit-content;
+
+	img {
+		width: 175px;
+		height: 175px;
+		object-fit: cover;
+		border-radius: 10px;
+	}
+
+	h4 {
+		width: 175px;
+		margin-top: 0.5rem;
+		font-size: 1rem;
+	}
+`;
+
+const LoadingMessage = styled.div`
+	color: white;
+	font-size: 1.5rem;
+	text-align: center;
+	margin-top: 2rem;
 `;

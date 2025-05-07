@@ -14,13 +14,19 @@ export default function App() {
 		setFavicon();
 	}, []);
 
-	// Extract token from URL on first load
+	// Extract token from URL on first load or check local storage
 	useEffect(() => {
 		const hash = window.location.hash;
-		if (hash) {
-			const _token = hash.substring(1).split("&")[0].split("=")[1];
+		let _token = hash ? hash.substring(1).split("&")[0].split("=")[1] : null;
+
+		if (!_token) {
+			_token = localStorage.getItem("spotifyToken");
+		}
+
+		if (_token) {
 			dispatch({ type: reducerCases.SET_TOKEN, token: _token });
 			window._spotifyToken = _token; // store globally for SDK
+			localStorage.setItem("spotifyToken", _token); // persist token
 			window.location.hash = ""; // clear hash
 		}
 	}, [dispatch]);
@@ -94,7 +100,7 @@ export default function App() {
 			});
 
 			newPlayer.connect();
-			setPlayer(newPlayer); 
+			setPlayer(newPlayer);
 		};
 
 		if (!document.getElementById("spotify-sdk")) {

@@ -44,7 +44,7 @@ export default function App() {
 			}
 
 			const newPlayer = new window.Spotify.Player({
-				name: "MysticAakash Web Player 🎧",
+				name: "MystiPlay🎧",
 				getOAuthToken: (cb) => cb(window._spotifyToken),
 				volume: 0.5,
 			});

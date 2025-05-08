@@ -129,6 +129,7 @@ export default function UserTopTracks({ token }) {
 }
 
 const Tracks = styled.div`
+	cursor: default;
 	h1 {
 		color: white;
 	}
@@ -192,7 +193,6 @@ const Track = styled.div`
 			opacity: 1;
 			visibility: visible;
 			transition: opacity 0.2s ease, visibility 0s 0s;
-			cursor: pointer;
 		}
 	}
 

@@ -5,8 +5,9 @@ import { MdHomeFilled } from "react-icons/md";
 import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
 import { useState } from "react";
+import { FiMenu } from "react-icons/fi";
 
-export default function NavBar({ navBackground }) {
+export default function NavBar({ toggleSidebar, navBackground }) {
 	const [{ userInfo, token }, dispatch] = useStateProvider();
 	const [query, setQuery] = useState("");
 
@@ -36,6 +37,11 @@ export default function NavBar({ navBackground }) {
 	return (
 		<Container navBackground={navBackground}>
 			<div className="left">
+				<div onClick={toggleSidebar} className="menu">
+					<FiMenu />
+				</div>
+			</div>
+			<div className="middle">
 				<div onClick={gotoHome} className="home">
 					<MdHomeFilled />
 				</div>
@@ -52,13 +58,14 @@ export default function NavBar({ navBackground }) {
 			</div>
 			<div className="avatar">
 				<a href="">
-					<CgProfile />
-					<span>{userInfo?.userName}</span>
+					{<img src={userInfo?.images[0].url} /> || <CgProfile />}
+					<span>{userInfo?.display_name}</span>
 				</a>
 			</div>
 		</Container>
 	);
 }
+
 const Container = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -71,43 +78,133 @@ const Container = styled.div`
 	background-color: ${({ navBackground }) =>
 		navBackground ? "rgba(0,0,0,.7)" : "none"};
 	box-sizing: border-box;
-	z-index: 10;
+	z-index: 100;
+
 	.left {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		.home {
-			padding: 1rem;
-			background-color: white;
-			border-radius: 50%;
+		justify-content: center;
+		.menu {
 			display: flex;
-			justify-content: center;
 			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			color: #ffffff;
+			transition: background-color 0.2s ease;
+			padding: 0.5rem;
+			border-radius: 50%;
 			height: 3rem;
 			width: 3rem;
-		}
-		.search__bar {
-			background-color: white;
-			width: 100%;
-			padding: 0.4rem 1rem;
-			border-radius: 2rem;
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
-			input {
-				border: none;
-				height: 2rem;
-				width: 100%;
-				&:focus {
-					outline: none;
+			z-index: 101;
+
+			svg {
+				font-size: 1.5rem;
+			}
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.1);
+			}
+			@media (min-width: 769px) {
+				display: none;
+			}
+			@media (max-width: 480px) {
+				height: 2.5rem;
+				width: 2.5rem;
+				svg {
+					font-size: 1.1rem;
 				}
 			}
 		}
 	}
+
+	.middle {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex: 1;
+		justify-content: center;
+
+		.home {
+			height: 3rem;
+			width: 3rem;
+			background-color: white;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+
+			svg {
+				font-size: 1.5rem;
+				color: black;
+			}
+
+			&:hover {
+				background-color: #282828;
+				transform: scale(1.1);
+				svg {
+					color: #ffffff;
+				}
+			}
+
+			@media (max-width: 480px) {
+				height: 2.5rem;
+				width: 2.5rem;
+				svg {
+					font-size: 1rem;
+				}
+			}
+		}
+
+		.search__bar {
+			background-color: white;
+			border-radius: 2rem;
+			height: 3rem;
+			display: flex;
+			align-items: center;
+			padding: 0 1rem;
+			gap: 0.5rem;
+			flex: 1;
+			max-width: 500px;
+
+			svg {
+				font-size: 1.2rem;
+				color: #333;
+			}
+
+			input {
+				border: none;
+				width: 90%;
+				height: 100%;
+				font-size: 1rem;
+				background: transparent;
+
+				&:focus {
+					outline: none;
+				}
+			}
+
+			@media (max-width: 768px) {
+				max-width: 25rem;
+			}
+
+			@media (max-width: 480px) {
+				max-width: 10rem;
+				height: 2.5rem;
+				padding: 0 0.7rem;
+				svg {
+					font-size: 1rem;
+				}
+				input {
+					font-size: 0.8rem;
+				}
+			}
+		}
+	}
+
 	.avatar {
 		background-color: black;
-		padding: 0.3rem 0.5rem;
-		padding-right: 0.5rem;
+		padding: 0.5rem 0.5rem;
 		margin-right: 1rem;
 		border-radius: 2rem;
 		display: flex;
@@ -115,13 +212,16 @@ const Container = styled.div`
 		align-items: center;
 		a {
 			display: flex;
-			// flex-direction: column;
 			justify-content: center;
 			align-items: center;
 			text-decoration: none;
 			color: white;
 			gap: 0.5rem;
 			font-weight: bold;
+			img {
+				width: 2rem;
+				border-radius: 50%;
+			}
 			svg {
 				font-size: 1.8rem;
 				background-color: #282828;
@@ -130,5 +230,25 @@ const Container = styled.div`
 				color: #c7c5c5;
 			}
 		}
+		@media (max-width: 786px) {
+		}
+		@media (max-width: 480px) {
+			margin-right: 0;
+			padding: 0;
+			img {
+				width: 2.4rem !important;
+			}
+			span {
+				display: none;
+			}
+		}
+	}
+
+	@media (max-width: 786px) {
+		padding: 1rem;
+	}
+	@media (max-width: 480px) {
+		padding: 0.5rem;
+		height: 10vh;
 	}
 `;

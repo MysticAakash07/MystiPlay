@@ -29,10 +29,13 @@ const Container = styled.div`
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
+	overflow: hidden;
+
 	.top_links {
 		display: flex;
 		flex-direction: column;
 	}
+
 	.logo {
 		text-align: center;
 		margin: 1rem 0;
@@ -41,6 +44,7 @@ const Container = styled.div`
 			block-size: auto;
 		}
 	}
+
 	.library {
 		display: flex;
 		flex-direction: row;

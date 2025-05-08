@@ -25,7 +25,7 @@ export default function Artist() {
 						}
 					),
 					axios.get(
-						`https://api.spotify.com/v1/artists/${selectedArtistId}/albums?include_groups=album,single&market=IN&limit=10`,
+						`https://api.spotify.com/v1/artists/${selectedArtistId}/albums?include_groups=album,single&market=IN`,
 						{ headers: { Authorization: `Bearer ${token}` } }
 					),
 				]);
@@ -49,7 +49,12 @@ export default function Artist() {
 		);
 		dispatch({
 			type: reducerCases.SET_PLAYING,
-			currentlyPlaying: { id, name, artists, image },
+			currentlyPlaying: {
+				id,
+				name,
+				artists: artistsArray.map((artist) => artist.name),
+				image,
+			},
 		});
 		dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
 	};
@@ -116,6 +121,7 @@ export default function Artist() {
 const Container = styled.div`
 	padding: 2rem;
 	color: white;
+	cursor: default;
 `;
 
 const ArtistHeader = styled.div`
@@ -205,17 +211,17 @@ const AlbumCard = styled.div`
 
 	img {
 		width: 15vh;
-        height: 15vh;
+		height: 15vh;
 		border-radius: 10px;
 	}
 
 	p {
 		margin-top: 0.5rem;
 		font-size: 0.9rem;
-        font-weight: 500;
-        overflow: hidden;
-        text-wrap: nowrap;
-        text-overflow: ellipsis;
+		font-weight: 500;
+		overflow: hidden;
+		text-wrap: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	small {

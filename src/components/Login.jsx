@@ -45,6 +45,7 @@ const Container = styled.div`
 	width: 100vw;
 	background-color: #1db954;
 	gap: 5rem;
+
 	img {
 		height: 20vh;
 	}
@@ -56,5 +57,27 @@ const Container = styled.div`
 		color: #49f585;
 		cursor: pointer;
 		font-size: 1.4rem;
+	}
+	@media (max-width: 768px) {
+		gap: 2rem;
+
+		img {
+			height: 15vh;
+		}
+
+		button {
+			padding: 0.8rem 4rem;
+			font-size: 1.2rem;
+		}
+	}
+	@media (max-width: 480px) {
+		img {
+			height: 12vh;
+		}
+
+		button {
+			padding: 0.6rem 3rem;
+			font-size: 1rem;
+		}
 	}
 `;

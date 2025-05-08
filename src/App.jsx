@@ -4,6 +4,7 @@ import Spotify from "./components/Spotify";
 import { useStateProvider } from "./utils/StateProvider";
 import { reducerCases } from "./utils/Constants";
 import setFavicon from "./utils/setFavicon";
+import axios from "axios";
 
 export default function App() {
 	const [{ token }, dispatch] = useStateProvider();
@@ -25,9 +26,9 @@ export default function App() {
 
 		if (_token) {
 			dispatch({ type: reducerCases.SET_TOKEN, token: _token });
-			window._spotifyToken = _token; // store globally for SDK
-			localStorage.setItem("spotifyToken", _token); // persist token
-			window.location.hash = ""; // clear hash
+			window._spotifyToken = _token; // Store globally for SDK
+			localStorage.setItem("spotifyToken", _token); // Persist token
+			window.location.hash = ""; // Clear hash
 		}
 	}, [dispatch]);
 
@@ -38,12 +39,48 @@ export default function App() {
 		}
 	}, [token]);
 
+	// Validate token to avoid being stuck in an empty state
+	const validateToken = async (token) => {
+		try {
+			const response = await axios.get("https://api.spotify.com/v1/me", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			return response.status === 200;
+		} catch (error) {
+			console.error("Token validation failed:", error);
+			return false;
+		}
+	};
+
+	// Check token validity on initial load
+	useEffect(() => {
+		const checkTokenValidity = async () => {
+			if (token) {
+				const isValid = await validateToken(token);
+				if (!isValid) {
+					console.log("Token is invalid or expired. Redirecting to login...");
+					logout(); // Clear token and force re-login
+				}
+			}
+		};
+
+		checkTokenValidity();
+	}, [token]);
+
+	// Logout/Disconnect function
+	const logout = () => {
+		localStorage.removeItem("spotifyToken");
+		dispatch({ type: reducerCases.SET_TOKEN, token: null });
+		window.location.reload(); // Force a re-login
+	};
+
 	// Setup Spotify SDK script and playback logic
 	useEffect(() => {
 		if (!token || player) return; // Prevent multiple initializations
 
 		window.onSpotifyWebPlaybackSDKReady = () => {
-			// Check if a player instance already exists
 			if (player) {
 				console.log("Player already initialized");
 				return;
@@ -57,10 +94,7 @@ export default function App() {
 
 			newPlayer.addListener("ready", async ({ device_id }) => {
 				console.log("Ready with Device ID", device_id);
-				dispatch({
-					type: reducerCases.SET_DEVICE_ID,
-					deviceId: device_id,
-				});
+				dispatch({ type: reducerCases.SET_DEVICE_ID, deviceId: device_id });
 
 				try {
 					await fetch("https://api.spotify.com/v1/me/player", {
@@ -85,10 +119,12 @@ export default function App() {
 
 			newPlayer.addListener("account_error", ({ message }) => {
 				console.error("Account Error:", message);
+				logout(); // If account error, force logout
 			});
 
 			newPlayer.addListener("authentication_error", ({ message }) => {
 				console.error("Authentication Error:", message);
+				logout();
 			});
 
 			newPlayer.addListener("initialization_error", ({ message }) => {

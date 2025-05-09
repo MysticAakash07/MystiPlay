@@ -126,5 +126,8 @@ const Container = styled.div`
 
 	.spotify_footer {
 		height: 15vh;
+		// position: fixed;
+		// bottom: 0;
+		// z-index: 1001;
 	}
 `;

@@ -20,15 +20,15 @@ export default function Album({ headerBackground }) {
 					<h1 className="title">{selectedAlbum.name}</h1>
 					<div className="albumDetails">
 						<span>By</span>
-						<h3>{selectedAlbum.artists}</h3>
+						<h3 className="artist-name">{selectedAlbum.artists}</h3>
 						<span>
 							<b> · </b>
 							{selectedAlbum.release_date}
 						</span>
-						<span>
+						<span className="total-songs">
 							<b> · </b> {selectedAlbum.total_tracks} songs
 						</span>
-						<span>
+						<span className="album-duration">
 							<b> · </b> {selectedAlbum.duration}
 						</span>
 					</div>
@@ -84,10 +84,10 @@ export default function Album({ headerBackground }) {
 									<span className="artists">{artists.join(", ")}</span>
 								</div>
 							</div>
-							<div className="col">
+							<div className="col album">
 								<span>{album}</span>
 							</div>
-							<div className="col">
+							<div className="col duration">
 								<span>{mstoMinutesAndSeconds(duration)}</span>
 							</div>
 						</div>
@@ -100,10 +100,11 @@ export default function Album({ headerBackground }) {
 
 const AlbumContainer = styled.div`
 	.album {
-		margin: 0 2rem;
+		margin: 1rem 2rem;
 		display: flex;
 		align-items: flex-end;
 		gap: 2rem;
+
 		.image {
 			img {
 				height: 18rem;
@@ -117,10 +118,13 @@ const AlbumContainer = styled.div`
 			flex-direction: column;
 			justify-content: space-between;
 			color: #e0dede;
+
 			.title {
 				color: white;
 				font-size: 3rem;
+				line-height: 1.1;
 			}
+
 			.albumDetails {
 				margin: 0.6rem 0;
 				display: flex;
@@ -141,12 +145,69 @@ const AlbumContainer = styled.div`
 				}
 			}
 		}
+		@media (max-width: 786px) {
+			gap: 1rem;
+			.image {
+				img {
+					height: 12rem;
+				}
+			}
+			.details {
+				max-height: 12rem;
+				font-size: 0.9rem;
+				.title {
+					font-size: 1.75rem;
+					margin: 0.5rem 0;
+				}
+				.albumDetails {
+					font-size: 0.9rem;
+					margin: 0.5rem 0;
+				}
+			}
+		}
+
+		@media (max-width: 450px) {
+			flex-direction: column;
+			justify-content: center;
+			margin: 1rem 1rem;
+			align-items: center;
+			.type {
+				display: none;
+			}
+			.image {
+				img {
+					height: 10rem;
+				}
+			}
+			.details {
+				align-self: flex-start;
+				max-height: 10rem;
+				font-size: 0.8rem;
+				.title {
+					font-size: 1.4rem;
+				}
+				.artist-name {
+					font-size: 0.9rem;
+				}
+				.albumDetails {
+					font-size: 0.8rem;
+					margin: 0.5rem 0;
+				}
+				.album-duration {
+					display: none;
+				}
+			}
+
+			.total-songs {
+				display: none;
+			}
+		}
 	}
+
 	.tracks {
 		margin: 0 2rem;
 		display: flex;
 		flex-direction: column;
-		margin-bottom: 5rem;
 		.row {
 			padding: 0.5rem 1rem;
 			display: grid;
@@ -213,9 +274,116 @@ const AlbumContainer = styled.div`
 					}
 				}
 			}
+
+			.album {
+				margin-left: 0; 
+			}
+		}
+
+		@media (max-width: 786px) {
+			margin: 0 2rem;
+			.row {
+				align-items: center;
+
+				.detail {
+					display: flex;
+					gap: 1rem;
+
+					.image {
+						img {
+							height: 9vh;
+							width: 9vh;
+							object-fit: cover;
+							border-radius: 6px;
+						}
+					}
+
+					.info {
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						max-height: 9vh;
+						overflow: hidden;
+
+						.name,
+						.artists {
+							padding-right: 1rem;
+							display: -webkit-box;
+							-webkit-line-clamp: 1;
+							-webkit-box-orient: vertical;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							line-height: 1.2;
+						}
+
+						.name {
+							color: white;
+							font-weight: 500;
+							font-size: 1rem;
+						}
+
+						.artists {
+							font-size: 0.9rem;
+							color: #ccc;
+						}
+					}
+				}
+
+				.album {
+					max-width: 90%;
+					font-size: 0.9rem;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.duration {
+					font-size: 0.9rem;
+				}
+			}
+		}
+
+		@media (max-width: 480px) {
+			margin: 0 0;
+			.row {
+				display: flex;
+
+				.detail {
+					gap: 1rem;
+					.info {
+						.name {
+							color: white;
+							font-weight: 500;
+							font-size: 0.9rem;
+						}
+						.artists {
+							font-size: 0.8rem;
+							color: #ccc;
+						}
+					}
+					.image {
+						img {
+							height: 8vh;
+							width: 8vh;
+						}
+					}
+				}
+				.index-col {
+					display: none;
+				}
+
+				.duration {
+					display: none;
+				}
+
+				.album {
+					display: none;
+				}
+			}
 		}
 	}
 `;
+
 const HeaderRow = styled.div`
 	display: grid;
 	grid-template-columns: 0.25fr 3fr 2fr 0.1fr;
@@ -227,4 +395,11 @@ const HeaderRow = styled.div`
 	transition: 0.3s ease-in-out;
 	background-color: ${({ headerBackground }) =>
 		headerBackground ? "#000000dc" : "none"};
+
+	@media (max-width: 786px) {
+		font-size: 1rem;
+	}
+	@media (max-width: 480px) {
+		display: none;
+	}
 `;

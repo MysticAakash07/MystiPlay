@@ -112,7 +112,7 @@ export default function Playlist({ headerBackground }) {
 						>
 							{selectedPlaylist.owner}
 						</a>
-						<span>
+						<span className="total-songs">
 							<b>·</b> {selectedPlaylist.total_songs} songs
 						</span>
 						<span>
@@ -174,10 +174,10 @@ export default function Playlist({ headerBackground }) {
 										<span className="artists">{artists.join(", ")}</span>
 									</div>
 								</div>
-								<div className="col">
+								<div className="col album">
 									<span>{album}</span>
 								</div>
-								<div className="col">
+								<div className="col duration">
 									<span>{mstoMinutesAndSeconds(duration)}</span>
 								</div>
 							</div>
@@ -191,7 +191,7 @@ export default function Playlist({ headerBackground }) {
 
 const Container = styled.div`
 	.playlist {
-		margin: 0 2rem;
+		margin: 1rem 2rem;
 		display: flex;
 		align-items: flex-end;
 		gap: 2rem;
@@ -202,6 +202,7 @@ const Container = styled.div`
 				border-radius: 10px;
 			}
 		}
+
 		.details {
 			max-height: 15rem;
 			display: flex;
@@ -211,7 +212,7 @@ const Container = styled.div`
 			overflow: hidden;
 			.title {
 				color: white;
-				font-size: 4rem;
+				font-size: 3.5rem;
 				line-height: 0.8;
 				margin: 1rem 0;
 			}
@@ -235,13 +236,77 @@ const Container = styled.div`
 				}
 			}
 		}
+
+		@media (max-width: 786px) {
+			gap: 1rem;
+			.image {
+				img {
+					height: 12rem;
+				}
+			}
+			.details {
+				max-height: 12rem;
+				font-size: 0.9rem;
+				.title {
+					font-size: 1.75rem;
+					margin: 0.5rem 0;
+				}
+			}
+			.playlistDetails {
+				font-size: 0.9rem;
+				margin: 0.5rem 0;
+				img {
+					height: 4vh;
+				}
+			}
+		}
+
+		@media (max-width: 450px) {
+			flex-direction: column;
+			justify-content: center;
+			margin: 1rem 1rem;
+			align-items: center;
+			.type {
+				display: none;
+			}
+			.image {
+				img {
+					height: 10rem;
+				}
+			}
+			.details {
+				align-self: flex-start;
+				max-height: 10rem;
+				font-size: 0.8rem;
+				.title {
+					font-size: 1.4rem;
+				}
+				.description {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+				}
+			}
+			.playlistDetails {
+				font-size: 0.8rem;
+				margin: 0.5rem 0;
+				img {
+					height: 3vh !important;
+				}
+			}
+			// .total-songs {
+			// 	display: none;
+			// }
+		}
 	}
+
 	.list {
 		.tracks {
 			margin: 0 2rem;
 			display: flex;
 			flex-direction: column;
-			margin-bottom: 5rem;
 			.row {
 				padding: 0.5rem 1rem;
 				display: grid;
@@ -300,11 +365,117 @@ const Container = styled.div`
 						}
 						display: flex;
 						flex-direction: column;
+						.artists {
+							color: #ccc;
+						}
 					}
 					.image {
 						img {
 							border-radius: 6px;
 						}
+					}
+				}
+			}
+
+			@media (max-width: 786px) {
+				margin: 0 2rem;
+				.row {
+					align-items: center;
+
+					.detail {
+						display: flex;
+						gap: 1rem;
+
+						.image {
+							img {
+								height: 9vh;
+								width: 9vh;
+								object-fit: cover;
+								border-radius: 6px;
+							}
+						}
+
+						.info {
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
+							max-height: 9vh;
+							overflow: hidden;
+
+							.name,
+							.artists {
+								padding-right: 1rem;
+								display: -webkit-box;
+								-webkit-line-clamp: 1;
+								-webkit-box-orient: vertical;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								line-height: 1.2;
+							}
+
+							.name {
+								color: white;
+								font-weight: 500;
+								font-size: 1rem;
+							}
+
+							.artists {
+								font-size: 0.9rem;
+								color: #ccc;
+							}
+						}
+					}
+
+					.album {
+						max-width: 90%;
+						font-size: 0.9rem;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						margin-right: 0.5rem;
+					}
+
+					.duration {
+						font-size: 0.9rem;
+					}
+				}
+			}
+
+			@media (max-width: 480px) {
+				margin: 0 0;
+				.row {
+					display: flex;
+
+					.detail {
+						gap: 1rem;
+						.info {
+							.name {
+								color: white;
+								font-weight: 500;
+								font-size: 0.9rem;
+							}
+							.artists {
+								font-size: 0.8rem;
+								color: #ccc;
+							}
+						}
+						.image {
+							img {
+								height: 8vh;
+								width: 8vh;
+							}
+						}
+					}
+					.index-col {
+						display: none;
+					}
+
+					.duration {
+						display: none;
+					}
+
+					.album {
+						display: none;
 					}
 				}
 			}
@@ -323,4 +494,11 @@ const HeaderRow = styled.div`
 	transition: 0.3s ease-in-out;
 	background-color: ${({ headerBackground }) =>
 		headerBackground ? "#000000dc" : "none"};
+
+	@media (max-width: 786px) {
+		font-size: 1rem;
+	}
+	@media (max-width: 480px) {
+		display: none;
+	}
 `;

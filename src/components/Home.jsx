@@ -92,7 +92,7 @@ const Button = styled.div`
 		border-color: white;
 	}
 
-	@media (max-width: 375px) {
+	@media (max-width: 350px) {
 		padding: 0.25rem 0.5rem;
 		border-radius: 50px;
 	}

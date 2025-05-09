@@ -107,6 +107,18 @@ const PlaylistGrid = styled.div`
 	gap: 1.5rem;
 	flex-wrap: wrap;
 	justify-content: center;
+
+	@media (max-width: 768px) {
+		gap: 1rem;
+	}
+
+	@media (max-width: 480px) {
+		gap: 0.75rem;
+	}
+
+	@media (max-width: 375px) {
+		gap: 0.5rem;
+	}
 `;
 
 const PlaylistCard = styled.div`
@@ -141,6 +153,54 @@ const PlaylistCard = styled.div`
 	&:hover {
 		background-color: rgba(255, 255, 255, 0.2);
 	}
+
+	@media (max-width: 768px) {
+		padding: 0.8rem;
+
+		img {
+			width: 140px;
+			height: 140px;
+		}
+
+		h4 {
+			width: 140px;
+			font-size: 0.9rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		padding: 0.6rem;
+
+		img {
+			width: 100px;
+			height: 100px;
+		}
+
+		h4 {
+			width: 100px;
+			font-size: 0.7rem;
+			font-weight: 500;
+		}
+	}
+
+	@media (max-width: 375px) {
+		width: 100%;
+		flex-direction: row;
+		border-radius: 10px;
+		padding: 0rem;
+		
+		img {
+			border-radius: 0;
+			width: 70px;
+			height: 70px;
+		}
+
+		h4 {
+			padding : 0rem 1rem;
+			width: 100%;
+			font-size: 0.7rem;
+		}
+	}
 `;
 
 const DefaultPlaylistCard = styled.div`
@@ -173,4 +233,12 @@ const LoadingMessage = styled.div`
 	font-size: 1.5rem;
 	text-align: center;
 	margin-top: 2rem;
+
+	@media (max-width: 480px) {
+		font-size: 1.2rem;
+	}
+
+	@media (max-width: 375px) {
+		font-size: 1rem;
+	}
 `;

@@ -56,11 +56,22 @@ export default function Home({ token }) {
 
 const Container = styled.div`
 	padding: 0.5rem 2rem;
+
+	@media (max-width: 480px) {
+		padding: 0.2rem .5rem;
+		font-size: .75rem;
+		
+	}
 `;
 const Buttons = styled.div`
 	display: flex;
 	gap: 1rem;
 	margin-bottom: 2rem;
+
+	@media (max-width: 480px) {
+		justify-content: center;
+		gap: 0.5rem;
+	}
 `;
 const Button = styled.div`
 	padding: 0.5rem 0.8rem;
@@ -79,6 +90,11 @@ const Button = styled.div`
 		background-color: ${({ active }) =>
 			active ? "white" : "rgba(47, 48, 47, 0.5)"};
 		border-color: white;
+	}
+
+	@media (max-width: 375px) {
+		padding: 0.25rem 0.5rem;
+		border-radius: 50px;
 	}
 `;
 const Content = styled.div``;

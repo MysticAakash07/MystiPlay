@@ -5,8 +5,7 @@ import { MdHomeFilled } from "react-icons/md";
 import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
 import { useState } from "react";
-import { FiMenu } from "react-icons/fi";
-
+import { IoLibrary } from "react-icons/io5";
 export default function NavBar({ toggleSidebar, navBackground }) {
 	const [{ userInfo, token }, dispatch] = useStateProvider();
 	const [query, setQuery] = useState("");
@@ -21,14 +20,9 @@ export default function NavBar({ toggleSidebar, navBackground }) {
 				`https://api.spotify.com/v1/search?q=${encodeURIComponent(
 					query
 				)}&type=album,playlist,track,artist&limit=10`,
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
+				{ headers: { Authorization: `Bearer ${token}` } }
 			);
 			const data = await response.json();
-			console.log(data);
 			dispatch({ type: reducerCases.SET_SEARCH_RESULTS, searchResults: data });
 			dispatch({ type: reducerCases.SET_VIEW, currentView: "search" });
 		}
@@ -38,7 +32,7 @@ export default function NavBar({ toggleSidebar, navBackground }) {
 		<Container navBackground={navBackground}>
 			<div className="left">
 				<div onClick={toggleSidebar} className="menu">
-					<FiMenu />
+					<IoLibrary />
 				</div>
 			</div>
 			<div className="middle">
@@ -57,8 +51,12 @@ export default function NavBar({ toggleSidebar, navBackground }) {
 				</div>
 			</div>
 			<div className="avatar">
-				<a href="">
-					{<img src={userInfo?.images[0].url} /> || <CgProfile />}
+				<a href="#">
+					{userInfo?.images?.[0]?.url ? (
+						<img src={userInfo.images[0].url} alt="profile" />
+					) : (
+						<CgProfile />
+					)}
 					<span>{userInfo?.display_name}</span>
 				</a>
 			</div>
@@ -95,7 +93,7 @@ const Container = styled.div`
 			border-radius: 50%;
 			height: 3rem;
 			width: 3rem;
-			z-index: 101;
+			z-index: 1101;
 
 			svg {
 				font-size: 1.5rem;
@@ -196,7 +194,7 @@ const Container = styled.div`
 					font-size: 1rem;
 				}
 				input {
-					font-size: 0.8rem;
+					font-size: 0.7rem;
 				}
 			}
 		}
@@ -229,8 +227,6 @@ const Container = styled.div`
 				border-radius: 1rem;
 				color: #c7c5c5;
 			}
-		}
-		@media (max-width: 786px) {
 		}
 		@media (max-width: 480px) {
 			margin-right: 0;

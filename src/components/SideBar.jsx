@@ -2,7 +2,9 @@ import styled from "styled-components";
 import { IoLibrary } from "react-icons/io5";
 import Playlists from "./Playlists";
 
-export default function SideBar() {
+export default function SideBar({ toggleSidebar }) {
+
+
 	return (
 		<Container>
 			<div className="top_links">
@@ -12,7 +14,7 @@ export default function SideBar() {
 						alt="spotify"
 					/>
 				</div>
-				<div className="library">
+				<div className="library" onClick={toggleSidebar}>
 					<IoLibrary />
 					<span>Your Library</span>
 				</div>

@@ -59,8 +59,7 @@ const Container = styled.div`
 
 	@media (max-width: 480px) {
 		padding: 0.2rem .5rem;
-		font-size: .75rem;
-		
+		font-size: .7rem;
 	}
 `;
 const Buttons = styled.div`

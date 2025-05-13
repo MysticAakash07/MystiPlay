@@ -5,7 +5,7 @@ import { useStateProvider } from "../../utils/StateProvider";
 import { reducerCases } from "../../utils/Constants";
 
 export default function UserTopArtists({ token }) {
-	const [, dispatch] =  useStateProvider();
+	const [, dispatch] = useStateProvider();
 	const [topArtists, setTopArtists] = useState([]);
 
 	useEffect(() => {
@@ -56,12 +56,16 @@ const ArtistGrid = styled.div`
 	gap: 2rem;
 	flex-wrap: wrap;
 	justify-content: center;
+
+	@media (max-width: 350px) {
+		gap: 1rem;
+	}
 `;
 const ArtistCard = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background-color: rgba(47, 48, 47, 0.8);
+	background-color: rgba(255, 255, 255, 0.1);
 	color: white;
 	padding: 1rem;
 	border-radius: 20px;
@@ -70,21 +74,59 @@ const ArtistCard = styled.div`
 	transition: background-color 0.3s;
 
 	img {
-		width: 200px;
-		height: 200px;
+		width: 180px;
+		height: 180px;
 		object-fit: cover;
 		border-radius: 50%;
 	}
 
 	h4 {
-		width: 200px;
+		width: 180px;
 		text-align: center;
 		margin-top: 0.5rem;
 		font-size: 1rem;
 	}
 
 	&:hover {
-		background-color: rgba(47, 48, 47, 0.6);
+		background-color: rgba(255, 255, 255, 0.2);
 		cursor: pointer;
+	}
+
+	@media (max-width: 786px) {
+		padding: 0.8rem;
+		img {
+			width: 130px;
+			height: 130px;
+		}
+		h4 {
+			width: 130px;
+			font-size: 0.8rem;
+			font-weight: 500;
+		}
+	}
+
+	@media (max-width: 480px) {
+	img {
+		width: 110px;
+		height: 110px;
+	}
+	h4 {
+		width: 110px;
+		font-size: 0.9rem;
+	}
+}
+
+	@media (max-width: 375px) {
+		background-color: transparent;
+		padding: 0.5rem;
+		img {
+			width: 100px;
+			height: 100px;
+		}
+		h4 {
+			width: 100px;
+			font-size: 0.8rem;
+			font-weight: 500;
+		}
 	}
 `;

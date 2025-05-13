@@ -116,10 +116,10 @@ export default function UserTopTracks({ token }) {
 							</span>
 						</div>
 					</div>
-					<div className="col">
+					<div className="col album">
 						<span>{track.album.name}</span>
 					</div>
-					<div className="col">
+					<div className="col duration">
 						<span>{mstoMinutesAndSeconds(track.duration_ms)}</span>
 					</div>
 				</Track>
@@ -132,19 +132,35 @@ const Tracks = styled.div`
 	cursor: default;
 	h1 {
 		color: white;
+		margin: 0 0 1rem 0;
+
+		@media (max-width: 786px) {
+			font-size: 1.5rem;
+		}
+
+		@media (max-width: 480px) {
+			font-size: 1rem;
+		}
 	}
 	.list {
 		.header__row {
 			display: grid;
 			grid-template-columns: 0.25fr 3fr 2fr 0.1fr;
 			color: #dddcdc;
-			margin: 1rem 0 0 0;
 			position: sticky;
 			top: 15vh;
 			padding: 1rem 2rem;
 			transition: 0.3s ease-in-out;
 			background-color: ${({ headerBackground }) =>
 				headerBackground ? "#000000dc" : "none"};
+		}
+
+		@media (max-width: 786px) {
+			font-size: 0.9rem;
+		}
+
+		@media (max-width: 480px) {
+			display: none;
 		}
 	}
 `;
@@ -197,16 +213,54 @@ const Track = styled.div`
 	}
 
 	.detail {
+		display: flex;
+		gap: 1rem;
 		img {
 			width: 100px;
 			height: 100px;
 			border-radius: 5px;
 		}
-		display: flex;
-		gap: 1rem;
+
 		.info {
 			display: flex;
 			flex-direction: column;
+			.name {
+				color: white;
+				font-weight: 500;
+			}
+		}
+	}
+
+	@media (max-width: 786px) {
+		font-size: 0.9rem;
+		padding: 0.2rem 0.5rem;
+		.detail {
+			img {
+				height: 12vh;
+				width: 12vh;
+			}
+		}
+	}
+	@media (max-width: 480px) {
+		font-size: 0.8rem;
+		display: flex;
+		padding: 0.2rem 0.5rem;
+		margin-bottom: 0.5rem;
+		.album,
+		.duration {
+			display: none;
+		}
+
+		.index-col {
+			max-width: 20px;
+		}
+
+		.detail {
+			flex-direction: row;
+			img {
+				height: 10vh;
+				width: 10vh;
+			}
 		}
 	}
 `;

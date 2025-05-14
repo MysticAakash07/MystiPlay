@@ -122,6 +122,14 @@ const Container = styled.div`
 	padding: 2rem;
 	color: white;
 	cursor: default;
+
+	@media (max-width: 768px) {
+		padding: 1rem;
+	}
+
+	@media (max-width: 480px) {
+		padding: 0.5rem;
+	}
 `;
 
 const ArtistHeader = styled.div`
@@ -146,6 +154,38 @@ const ArtistHeader = styled.div`
 	.artist-details {
 		font-weight: 500;
 	}
+
+	@media (max-width: 768px) {
+		gap: 1.5rem;
+		img {
+			width: 25vh;
+			height: 25vh;
+		}
+		h1 {
+			font-size: 2rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		margin: 0;
+		padding: 0;
+		gap: 0.5rem;
+		flex-direction: column;
+		text-align: center;
+
+		img {
+			width: 20vh;
+			height: 20vh;
+		}
+		h1 {
+			font-size: 1.8rem;
+		}
+		p {
+			font-size: 0.9rem;
+		}
+		.artist-details {
+		}
+	}
 `;
 
 const TrackList = styled.div`
@@ -160,7 +200,6 @@ const TrackList = styled.div`
 		background-color: rgba(255, 255, 255, 0.05);
 		padding: 1rem;
 		border-radius: 10px;
-
 		img {
 			height: 8vh;
 			border-radius: 10px;
@@ -185,6 +224,39 @@ const TrackList = styled.div`
 			background-color: rgba(0, 0, 0, 0.2);
 		}
 	}
+
+	@media (max-width: 768px) {
+		.track {
+			padding: 0.8rem;
+			img {
+				height: 7vh;
+			}
+		}
+	}
+
+	@media (max-width: 480px) {
+		h2 {
+			font-size: 1.2rem;
+		}
+		.track {
+			padding: 0.5rem;
+
+			img {
+				height: 6vh;
+				width: 6vh;
+			}
+
+			div {
+				.track-name,
+				.artist-name {
+					font-size: 0.9rem;
+				}
+			}
+			.index {
+				display: none;
+			}
+		}
+	}
 `;
 
 const AlbumsSection = styled.div`
@@ -194,12 +266,21 @@ const AlbumsSection = styled.div`
 	h2 {
 		margin-bottom: 1rem;
 	}
+
+	@media (max-width: 480px) {
+		h2 {
+			font-size: 1.2rem;
+		}
+	}
 `;
 
 const AlbumGrid = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	gap: 1rem;
+	justify-content: center;
+
+
 `;
 
 const AlbumCard = styled.div`
@@ -226,5 +307,17 @@ const AlbumCard = styled.div`
 
 	small {
 		color: #aaa;
+	}
+
+	@media (max-width: 480px) {
+		padding: 0.8rem;
+		width: 120px;
+		img {
+			width: 12vh;
+			height: 12vh;
+		}
+		p {
+			font-size: 0.8rem;
+		}
 	}
 `;

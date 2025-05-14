@@ -60,9 +60,16 @@ const Container = styled.div`
 		overflow: auto;
 		&::-webkit-scrollbar {
 			width: 0.7rem;
-			&-thumb {
-				background-color: rgba(255, 255, 255, 0.6);
-			}
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background-color: rgba(255, 255, 255, 0.4);
+			transition: background-color 0.3s ease;
+		}
+
+		&:hover::-webkit-scrollbar-thumb,
+		&:active::-webkit-scrollbar-thumb {
+			background-color: rgba(255, 255, 255, 0.6);
 		}
 		li {
 			display: flex;

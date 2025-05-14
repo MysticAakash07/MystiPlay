@@ -122,6 +122,19 @@ const Container = styled.div`
 		overflow-y: auto;
 		overflow-x: hidden;
 		position: relative;
+
+		&::-webkit-scrollbar {
+			width: 0.7rem;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background-color: rgba(255, 255, 255, 0.4);
+			transition: background-color 0.3s ease;
+		}
+
+		&:active::-webkit-scrollbar-thumb {
+			background-color: rgba(255, 255, 255, 0.6);
+		}
 	}
 
 	.spotify_footer {

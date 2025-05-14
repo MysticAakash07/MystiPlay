@@ -72,9 +72,9 @@ export default function Search() {
 								)
 							}
 						>
-							<span>{idx + 1}</span>
+							<span className="index">{idx + 1}</span>
 							<img src={track.album.images[2]?.url} alt={track.name} />
-							<div>
+							<div className="track-info">
 								<p>{track.name}</p>
 								<p className="artist">{track.artists[0].name}</p>
 							</div>
@@ -82,8 +82,8 @@ export default function Search() {
 					))}
 				</Tracks>
 
+				<h2>Top Artists</h2>
 				<Artists>
-					<h2>Top Artists</h2>
 					{searchResults.artists.items.slice(0, 3).map((artist) => (
 						<div
 							className="artist"
@@ -140,19 +140,41 @@ export default function Search() {
 }
 
 const Container = styled.div`
+	cursor: default;
 	color: white;
 	padding: 2rem;
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
+
 	h2 {
 		font-size: 2rem;
 		margin: 1rem 0;
+	}
+
+	@media (max-width: 768px) {
+		padding: 1rem;
+		h2 {
+			margin: 0.5rem 0;
+		}
+	}
+
+	@media (max-width: 480px) {
+		padding: 0.5rem;
+		h2 {
+			margin-left: 1rem;
+			font-size: 1.2rem;
+		}
 	}
 `;
 
 const MainSection = styled.div`
 	display: flex;
+
+	gap: 2rem;
+	@media (max-width: 768px) {
+		flex-direction: column;
+	}
 `;
 
 const Tracks = styled.div`
@@ -163,26 +185,44 @@ const Tracks = styled.div`
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		cursor: pointer;
 
 		img {
 			width: 50px;
 			height: 50px;
-			border-radius: 8px;
+			border-radius: 5px;
 		}
 
-		p {
-			margin: 0;
-		}
+		.track-info {
+			p {
+				margin: 0;
+			}
 
-		.artist {
-			font-size: 0.85rem;
-			color: #ccc;
+			.artist {
+				font-size: 0.85rem;
+				color: #ccc;
+			}
 		}
 
 		&:hover {
-			&:hover {
-				background-color: rgba(0, 0, 0, 0.3);
+			background-color: rgba(0, 0, 0, 0.3);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.track {
+			img {
+				width: 7vh;
+				height: 7vh;
+			}
+			.index {
+				display: none;
+			}
+			.track-info {
+				font-size: 0.8rem;
+
+				.artist {
+					font-size: 0.8rem;
+				}
 			}
 		}
 	}
@@ -193,6 +233,9 @@ const Artists = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
+	text-align: center;
+
 	.artist {
 		display: flex;
 		margin: 1rem 0;
@@ -207,11 +250,28 @@ const Artists = styled.div`
 		}
 
 		p {
-			display: flex;
-			justify-content: center;
-			text-align: center;
 			font-size: 1rem;
 			font-weight: 500;
+		}
+	}
+
+	@media (max-width: 786px) {
+		flex-direction: row;
+		justify-content: center;
+		gap: 3rem;
+	}
+
+	@media (max-width: 480px) {
+		flex-direction: column;
+		gap: 0;
+		.artist {
+			img {
+				height: 12vh;
+				width: 12vh;
+			}
+			p {
+				font-size: 0.9rem;
+			}
 		}
 	}
 `;
@@ -240,6 +300,33 @@ const GridContainer = styled.div`
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
+		}
+	}
+
+	@media (max-width: 786px) {
+		.card {
+			img {
+				width: 15vh;
+				height: 15vh;
+			}
+		}
+	}
+
+	@media (max-width: 480px) {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+
+		.card {
+			padding: 0.8rem;
+			width: 120px;
+			img {
+				width: 12vh;
+				height: 12vh;
+			}
+			p {
+				font-size: 0.8rem;
+			}
 		}
 	}
 `;

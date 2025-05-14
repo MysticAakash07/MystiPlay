@@ -279,8 +279,6 @@ const AlbumGrid = styled.div`
 	flex-wrap: wrap;
 	gap: 1rem;
 	justify-content: center;
-
-
 `;
 
 const AlbumCard = styled.div`

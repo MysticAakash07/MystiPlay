@@ -84,9 +84,15 @@ const Container = styled.div`
 		background-color: rgb(32, 87, 108);
 		min-height: 0;
 
+		padding-bottom: 15vh;
+		
 		@media (max-width: 768px) {
 			display: block;
 			position: relative;
+			padding-bottom: 12vh;
+		}
+		@media (max-width: 480px) {
+			padding-bottom: 20vh;
 		}
 	}
 
@@ -111,7 +117,7 @@ const Container = styled.div`
 			display: block;
 		}
 
-		@media (max-width: 480px) {
+		@media (max-width: 490px) {
 			width: 60%;
 		}
 	}
@@ -139,8 +145,16 @@ const Container = styled.div`
 
 	.spotify_footer {
 		height: 15vh;
-		// position: fixed;
-		// bottom: 0;
-		// z-index: 1001;
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		z-index: 1001;
+
+		@media (max-width: 768px) {
+			height: 12vh;
+		}
+		@media (max-width: 490px) {
+			height: 20vh;
+		}
 	}
 `;

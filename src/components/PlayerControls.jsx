@@ -209,4 +209,14 @@ const Container = styled.div`
 	.state {
 		font-size: 2rem;
 	}
+
+	@media (max-width: 768px) {
+		gap: 0.5rem;
+	}
+
+	@media (max-width: 490px) {
+		width: 100%;
+		justify-content: space-evenly;
+		gap: 0;
+	}
 `;

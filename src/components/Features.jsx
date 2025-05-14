@@ -134,6 +134,10 @@ const Container = styled.div`
 	justify-content: flex-end;
 	padding-right: 1rem;
 	gap: 1rem;
+
+	@media(max-width: 768px){
+		padding: 0;
+	}
 `;
 
 const IconGroup = styled.div`
@@ -141,15 +145,11 @@ const IconGroup = styled.div`
 	align-items: center;
 	gap: 0.5rem;
 
-	// .refresh-icon,
 	.device-icon {
 		cursor: pointer;
 		font-size: 1.3rem;
 		color: white;
 	}
-	// .refresh-icon {
-	// 	color: ${({ $loading }) => ($loading ? "#2EDE6D" : "white")};
-	// }
 `;
 
 const DevicePopup = styled.div`

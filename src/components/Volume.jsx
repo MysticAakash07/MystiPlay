@@ -136,4 +136,10 @@ const Container = styled.div`
 	.volume-icon.muted {
 		color: #e74c3c;
 	}
+
+	@media(max-width: 768px){
+		input{
+			width: 5rem;
+		}
+	}
 `;

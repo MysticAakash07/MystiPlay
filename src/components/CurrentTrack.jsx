@@ -17,7 +17,6 @@ export default function CurrentTrack() {
 					{
 						headers: {
 							Authorization: "Bearer " + token,
-							"Content-Type": "application/json",
 						},
 					}
 				);
@@ -31,7 +30,6 @@ export default function CurrentTrack() {
 						image: item.album.images[0].url,
 					};
 
-					// Update only if the track has changed
 					if (!currentlyPlaying || currentlyPlaying.id !== newTrack.id) {
 						dispatch({
 							type: reducerCases.SET_PLAYING,
@@ -39,22 +37,18 @@ export default function CurrentTrack() {
 						});
 					}
 				} else {
-					// No track playing, reset currentlyPlaying
-					if (currentlyPlaying) {
-						dispatch({
-							type: reducerCases.SET_PLAYING,
-							currentlyPlaying: null,
-						});
-					}
+					dispatch({
+						type: reducerCases.SET_PLAYING,
+						currentlyPlaying: null,
+					});
 				}
 			} catch (error) {
 				console.error("Error fetching current track:", error);
 			}
 		};
 
-		// Fetch immediately and then at intervals
 		getCurrentTrack();
-		intervalId = setInterval(getCurrentTrack, 5000); // 5-second interval
+		intervalId = setInterval(getCurrentTrack, 5000);
 
 		return () => clearInterval(intervalId);
 	}, [token, currentlyPlaying, dispatch]);
@@ -88,18 +82,67 @@ const Container = styled.div`
 			width: 80px;
 		}
 	}
+
 	.track__info {
 		display: flex;
 		flex-direction: column;
 		gap: 0.3rem;
+		overflow: hidden;
+		max-width: 100%;
+
 		h4 {
 			color: white;
 			margin: 0;
+			font-size: 1rem;
+			line-height: 1.2;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
+
 		h6 {
 			color: #b3b3b3;
 			font-size: 0.8rem;
 			margin: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+	@media (max-width: 768px) {
+		.track {
+			gap: 0.5rem;
+			img {
+				width: 60px;
+			}
+		}
+		.track__info {
+			h4 {
+				font-size: 0.8rem;
+			}
+			h6 {
+				font-size: 0.7rem;
+			}
+		}
+	}
+
+	@media (max-width: 490px) {
+		width: 100%;
+
+		.track__info {
+			h4 {
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-height: 2.4em;
+				word-wrap: break-word;
+			}
+
+			h6 {
+				white-space: nowrap;
+			}
 		}
 	}
 `;

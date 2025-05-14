@@ -262,12 +262,18 @@ const Artists = styled.div`
 	}
 
 	@media (max-width: 480px) {
+	margin: 0 1rem;	
+	align-items: flex-start;
 		flex-direction: column;
 		gap: 0;
 		.artist {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 1rem;
 			img {
-				height: 12vh;
-				width: 12vh;
+				height: 10vh;
+				width: 10vh;
 			}
 			p {
 				font-size: 0.9rem;

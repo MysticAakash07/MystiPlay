@@ -127,17 +127,12 @@ const Container = styled.div`
 	}
 
 	@media (max-width: 490px) {
-		width: 100%;
+		width: 90%;
 
 		.track__info {
+			max-width: 70%;
 			h4 {
-				display: -webkit-box;
-				-webkit-line-clamp: 2;
-				-webkit-box-orient: vertical;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				max-height: 2.4em;
-				word-wrap: break-word;
+				white-space: nowrap;
 			}
 
 			h6 {

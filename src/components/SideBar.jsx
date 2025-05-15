@@ -3,8 +3,6 @@ import { IoLibrary } from "react-icons/io5";
 import Playlists from "./Playlists";
 
 export default function SideBar({ toggleSidebar }) {
-
-
 	return (
 		<Container>
 			<div className="top_links">
@@ -14,7 +12,11 @@ export default function SideBar({ toggleSidebar }) {
 						alt="spotify"
 					/>
 				</div>
-				<div className="library" onClick={toggleSidebar}>
+				<div className="library-mobile" onClick={toggleSidebar}>
+					<IoLibrary />
+					<span>Your Library</span>
+				</div>
+				<div className="library-laptop">
 					<IoLibrary />
 					<span>Your Library</span>
 				</div>
@@ -47,7 +49,20 @@ const Container = styled.div`
 		}
 	}
 
-	.library {
+	.library-mobile {
+		display: none;
+		flex-direction: row;
+		padding: 1rem;
+		gap: 1rem;
+		align-items: center;
+		cursor: pointer;
+		font-weight: bold;
+		font-size: large;
+		transition: 0.3s ease-in-out;
+		color: white;
+	}
+
+	.library-laptop {
 		display: flex;
 		flex-direction: row;
 		padding: 1rem;
@@ -58,5 +73,14 @@ const Container = styled.div`
 		font-size: large;
 		transition: 0.3s ease-in-out;
 		color: white;
+	}
+
+	@media (max-width: 768px) {
+		.library-laptop {
+			display: none;
+		}
+		.library-mobile {
+			display: flex;
+		}
 	}
 `;

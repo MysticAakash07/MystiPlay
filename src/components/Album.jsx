@@ -276,7 +276,7 @@ const AlbumContainer = styled.div`
 			}
 
 			.album {
-				margin-left: 0; 
+				margin-left: 0;
 			}
 		}
 

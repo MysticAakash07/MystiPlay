@@ -1,9 +1,9 @@
-import React from "react";
 import { useStateProvider } from "../../utils/StateProvider";
 import { reducerCases } from "../../utils/Constants";
 import styled from "styled-components";
 import axios from "axios";
 import { fetchAndSetAlbum } from "../../utils/fetchAlbumDetails";
+import Profile_FallBack from "../../assets/Profile_FallBack.svg";
 
 export default function Search() {
 	const [{ searchResults, token }, dispatch] = useStateProvider();
@@ -67,7 +67,7 @@ export default function Search() {
 									track.uri,
 									track.id,
 									track.name,
-									track.artists,
+									track.artists.map((artist) => artist.name),
 									track.album.images[1]?.url
 								)
 							}
@@ -82,8 +82,9 @@ export default function Search() {
 					))}
 				</Tracks>
 
-				<h2>Top Artists</h2>
+				<h2 className="artist-header-m">Top Artists</h2>
 				<Artists>
+					<h2 className="artist-header-lg">Top Artists</h2>
 					{searchResults.artists.items.slice(0, 3).map((artist) => (
 						<div
 							className="artist"
@@ -99,7 +100,10 @@ export default function Search() {
 								});
 							}}
 						>
-							<img src={artist.images?.[0]?.url} alt={artist.name} />
+							<img
+								src={artist.images?.[0]?.url || Profile_FallBack}
+								alt={artist.name}
+							/>
 							<p>{artist.name}</p>
 						</div>
 					))}
@@ -152,15 +156,29 @@ const Container = styled.div`
 		margin: 1rem 0;
 	}
 
+	.artist-header-m {
+		display: none;
+	}
+
 	@media (max-width: 768px) {
 		padding: 1rem;
+
 		h2 {
 			margin: 0.5rem 0;
+		}
+
+		.artist-header-m {
+			display: inline;
+		}
+
+		.artist-header-lg {
+			display: none;
 		}
 	}
 
 	@media (max-width: 480px) {
 		padding: 0.5rem;
+
 		h2 {
 			margin-left: 1rem;
 			font-size: 1.2rem;
@@ -170,6 +188,7 @@ const Container = styled.div`
 
 const MainSection = styled.div`
 	display: flex;
+	align-items: flex-start;
 
 	gap: 2rem;
 	@media (max-width: 768px) {
@@ -187,11 +206,14 @@ const Tracks = styled.div`
 		gap: 1rem;
 
 		img {
-			width: 50px;
-			height: 50px;
+			width: 60px;
+			height: 60px;
 			border-radius: 5px;
 		}
 
+		.index {
+			width: 1rem;
+		}
 		.track-info {
 			p {
 				margin: 0;
@@ -214,9 +236,11 @@ const Tracks = styled.div`
 				width: 7vh;
 				height: 7vh;
 			}
+
 			.index {
 				display: none;
 			}
+
 			.track-info {
 				font-size: 0.8rem;
 
@@ -239,6 +263,7 @@ const Artists = styled.div`
 	.artist {
 		display: flex;
 		margin: 1rem 0;
+		align-items: center;
 		flex-direction: column;
 
 		img {
@@ -257,24 +282,28 @@ const Artists = styled.div`
 
 	@media (max-width: 786px) {
 		flex-direction: row;
+		align-self: center;
 		justify-content: center;
 		gap: 3rem;
 	}
 
 	@media (max-width: 480px) {
-	margin: 0 1rem;	
-	align-items: flex-start;
+		margin: 0 1rem;
+		align-self: flex-start;
 		flex-direction: column;
 		gap: 0;
+
 		.artist {
 			display: flex;
 			flex-direction: row;
-			align-items: center;
+			align-self: flex-start;
 			gap: 1rem;
+
 			img {
 				height: 10vh;
 				width: 10vh;
 			}
+
 			p {
 				font-size: 0.9rem;
 			}
@@ -295,7 +324,8 @@ const GridContainer = styled.div`
 		text-align: center;
 
 		img {
-			width: 100%;
+			width: 8rem;
+			height: 8rem;
 			border-radius: 10px;
 			margin-bottom: 0.5rem;
 		}

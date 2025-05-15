@@ -10,6 +10,7 @@ import {
 import { useStateProvider } from "../utils/StateProvider";
 import { AiFillClockCircle } from "react-icons/ai";
 import { FaPlay } from "react-icons/fa";
+import Profile_FallBack from "../assets/Profile_FallBack.svg";
 
 export default function Playlist({ headerBackground }) {
 	const [{ token, selectedPlaylistId, selectedPlaylist }, dispatch] =
@@ -104,7 +105,7 @@ export default function Playlist({ headerBackground }) {
 					<p className="description">{selectedPlaylist.description}</p>
 					<div className="playlistDetails">
 						<img
-							src={selectedPlaylist.owner_image}
+							src={selectedPlaylist.owner_image || Profile_FallBack}
 							alt={selectedPlaylist.owner}
 						/>
 						<a

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
 import { fetchAndSetAlbum } from "../utils/fetchAlbumDetails";
+import Profile_FallBack from "../assets/Profile_FallBack.svg";
+import Track_Album_Playlist_FallBack from "../assets/Track_Album_Playlist_FallBack.svg";
 
 export default function Artist() {
 	const [{ selectedArtistId, token }, dispatch] = useStateProvider();
@@ -64,7 +66,10 @@ export default function Artist() {
 	return (
 		<Container>
 			<ArtistHeader>
-				<img src={artistInfo.images?.[0]?.url} alt={artistInfo.name} />
+				<img
+					src={artistInfo.images?.[0]?.url || Profile_FallBack}
+					alt={artistInfo.name}
+				/>
 				<div className="artist-details">
 					<h1>{artistInfo.name}</h1>
 					<p>Genres: {artistInfo.genres.join(", ") || "N/A"}</p>
@@ -89,7 +94,10 @@ export default function Artist() {
 						}
 					>
 						<span className="index">{index + 1}.</span>
-						<img src={track.album.images[2]?.url} alt={track.name} />
+						<img
+							src={track.album.images[2]?.url || Track_Album_Playlist_FallBack}
+							alt={track.name}
+						/>
 						<div>
 							<span className="track-name">{track.name}</span>
 							<span className="artist-name">{track.artists[0].name}</span>
@@ -107,7 +115,10 @@ export default function Artist() {
 								key={album.id}
 								onClick={() => fetchAndSetAlbum(album.id, token, dispatch)}
 							>
-								<img src={album.images[1]?.url} alt={album.name} />
+								<img
+									src={album.images[1]?.url || Track_Album_Playlist_FallBack}
+									alt={album.name}
+								/>
 								<p>{album.name}</p>
 							</AlbumCard>
 						))}

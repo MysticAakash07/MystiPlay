@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
 import axios from "axios";
 import { reducerCases } from "../utils/Constants";
+import Track_Album_Playlist_FallBack from "../assets/Track_Album_Playlist_FallBack.svg";
 
 export default function CurrentTrack() {
 	const [{ token, currentlyPlaying }, dispatch] = useStateProvider();
@@ -58,7 +59,10 @@ export default function CurrentTrack() {
 			{currentlyPlaying ? (
 				<div className="track">
 					<div className="track__image">
-						<img src={currentlyPlaying.image} alt={currentlyPlaying.name} />
+						<img
+							src={currentlyPlaying.image || Track_Album_Playlist_FallBack}
+							alt={currentlyPlaying.name}
+						/>
 					</div>
 					<div className="track__info">
 						<h4>{currentlyPlaying.name}</h4>

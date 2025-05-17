@@ -5,6 +5,7 @@ import { AiFillClockCircle } from "react-icons/ai";
 import { FaPlay } from "react-icons/fa";
 import { reducerCases } from "../../utils/Constants";
 import { useStateProvider } from "../../utils/StateProvider";
+import Track_Album_Playlist_FallBack from "../../assets/Track_Album_Playlist_FallBack.svg";
 
 export default function UserTopTracks({ token }) {
 	const [topTracks, setTopTracks] = useState([]);
@@ -107,7 +108,12 @@ export default function UserTopTracks({ token }) {
 
 					<div className="col detail">
 						<div className="image">
-							<img src={track.album.images[1]?.url} alt="track" />
+							<img
+								src={
+									track.album.images[1]?.url || Track_Album_Playlist_FallBack
+								}
+								alt="track"
+							/>
 						</div>
 						<div className="info">
 							<span className="name">{track.name}</span>

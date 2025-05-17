@@ -4,6 +4,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { fetchAndSetAlbum } from "../../utils/fetchAlbumDetails";
 import Profile_FallBack from "../../assets/Profile_FallBack.svg";
+import Track_Album_Playlist_FallBack from "../../assets/Track_Album_Playlist_FallBack.svg";
+
 
 export default function Search() {
 	const [{ searchResults, token }, dispatch] = useStateProvider();
@@ -118,7 +120,10 @@ export default function Search() {
 						key={album.id}
 						onClick={() => handleClick("album", album)}
 					>
-						<img src={album.images[1]?.url} alt={album.name} />
+						<img
+							src={album.images[1]?.url || Track_Album_Playlist_FallBack}
+							alt={album.name}
+						/>
 						<p>{album.name}</p>
 					</div>
 				))}
@@ -134,7 +139,10 @@ export default function Search() {
 							key={playlist.id}
 							onClick={() => handleClick("playlist", playlist.id)}
 						>
-							<img src={playlist.images?.[0]?.url} alt={playlist.name} />
+							<img
+								src={playlist.images?.[0]?.url || Track_Album_Playlist_FallBack}
+								alt={playlist.name}
+							/>
 							<p>{playlist.name}</p>
 						</div>
 					))}

@@ -150,5 +150,21 @@ export default function App() {
 		}
 	}, [token, player, dispatch]);
 
+	//Added to check player_state
+	useEffect(() => {
+		if (player) {
+			player.addListener("player_state_changed", (state) => {
+				if (state && !state.paused && state.duration > 0) {
+					console.log("Playback started successfully");
+				} else {
+					console.log(
+						"Playback paused or stopped unexpectedly, trying to resume..."
+					);
+					player.resume().catch((err) => console.error("Resume failed:", err));
+				}
+			});
+		}
+	}, [player]);
+
 	return <div>{token ? <Spotify /> : <Login />}</div>;
 }

@@ -3,6 +3,8 @@ import axios from "axios";
 import styled from "styled-components";
 import { useStateProvider } from "../../utils/StateProvider";
 import { fetchAndSetAlbum } from "../../utils/fetchAlbumDetails";
+import Track_Album_Playlist_FallBack from "../../assets/Track_Album_Playlist_FallBack.svg";
+
 
 export default function UserAlbums({ token }) {
 	const [albums, setAlbums] = useState([]);
@@ -36,7 +38,10 @@ export default function UserAlbums({ token }) {
 					key={alb.album.id}
 					onClick={() => fetchAndSetAlbum(alb.album.id, token, dispatch)}
 				>
-					<img src={alb.album.images[0]?.url} alt={alb.album.name} />
+					<img
+						src={alb.album.images[0]?.url || Track_Album_Playlist_FallBack}
+						alt={alb.album.name}
+					/>
 					<h4>{alb.album.name}</h4>
 				</AlbumCard>
 			))}

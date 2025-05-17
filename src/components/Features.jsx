@@ -171,7 +171,7 @@ const DevicePopup = styled.div`
 		cursor: pointer;
 		padding: 0.4rem 0.8rem;
 		white-space: nowrap;
-
+		user-select: none;
 		&:hover {
 			background-color: #383838;
 		}

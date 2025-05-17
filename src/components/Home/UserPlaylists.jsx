@@ -3,6 +3,8 @@ import axios from "axios";
 import styled from "styled-components";
 import { useStateProvider } from "../../utils/StateProvider";
 import { reducerCases } from "../../utils/Constants";
+import Track_Album_Playlist_FallBack from "../../assets/Track_Album_Playlist_FallBack.svg";
+
 
 export default function UserPlaylists({ token }) {
 	const [userPlaylists, setPlaylists] = useState([]);
@@ -80,7 +82,10 @@ export default function UserPlaylists({ token }) {
 				<DefaultPlaylistCard
 					onClick={() => changeCurrentPlaylist(selectedPlaylistId)}
 				>
-					<img src={defaultPlaylist.image} alt={defaultPlaylist.name} />
+					<img
+						src={defaultPlaylist.image || Track_Album_Playlist_FallBack}
+						alt={defaultPlaylist.name}
+					/>
 					<h4>{defaultPlaylist.name}</h4>
 				</DefaultPlaylistCard>
 			</PlaylistGrid>

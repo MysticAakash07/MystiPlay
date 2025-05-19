@@ -32,6 +32,9 @@ export default function Playlist({ headerBackground }) {
 				const totalTracks = initialResponse.data.tracks.total;
 				const ownerId = initialResponse.data.owner.id;
 
+				console.log(ownerId);
+				console.log(userInfo.id);
+
 				// Fetch all tracks using pagination
 				let allTracks = [];
 				let offset = 0;

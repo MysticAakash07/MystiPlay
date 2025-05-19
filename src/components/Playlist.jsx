@@ -144,7 +144,7 @@ export default function Playlist({ headerBackground }) {
 		}
 	};
 
-	if (!selectedPlaylist) return <div>Loading playlist...</div>;
+	if ( !userInfo || !selectedPlaylist) return <div>Loading playlist...</div>;
 
 	return (
 		<Container>
@@ -169,15 +169,17 @@ export default function Playlist({ headerBackground }) {
 						>
 							{selectedPlaylist.owner}
 						</a>
-						{userInfo.id !== selectedPlaylist.owner_id && (
-							<span className="follow-icon" onClick={toggleFollow}>
-								{isFollowing ? (
-									<AiFillHeart size={24} color=" #1db954" />
-								) : (
-									<AiOutlineHeart size={24} color="white" />
-								)}
-							</span>
-						)}
+						{userInfo?.id &&
+							selectedPlaylist?.owner_id &&
+							userInfo.id !== selectedPlaylist.owner_id && (
+								<span className="follow-icon" onClick={toggleFollow}>
+									{isFollowing ? (
+										<AiFillHeart size={24} color=" #1db954" />
+									) : (
+										<AiOutlineHeart size={24} color="white" />
+									)}
+								</span>
+							)}
 						<span className="total-songs">
 							<b>·</b> {selectedPlaylist.total_songs} songs
 						</span>
@@ -374,8 +376,8 @@ const Container = styled.div`
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					width: 24px;
-					height: 24px;
+					width: 24px; /* Adjust size as needed */
+					height: 24px; /* Adjust size as needed */
 					margin-left: 0.5rem;
 				}
 			}

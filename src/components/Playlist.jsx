@@ -18,14 +18,6 @@ export default function Playlist({ headerBackground }) {
 		useStateProvider();
 	const [isFollowing, setIsFollowing] = useState(false);
 
-	const [mounted, setMounted] = useState(false);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
-	if (!mounted) return null;
-
 	useEffect(() => {
 		const getInitialPlaylist = async () => {
 			try {

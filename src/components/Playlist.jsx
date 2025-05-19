@@ -307,6 +307,7 @@ const Container = styled.div`
 					display: flex;
 					align-self: center;
 					justify-content: center;
+					border: 2px solid red;
 				}
 			}
 		}

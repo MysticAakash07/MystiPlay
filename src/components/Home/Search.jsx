@@ -3,7 +3,7 @@ import { reducerCases } from "../../utils/Constants";
 import styled from "styled-components";
 import axios from "axios";
 import { fetchAndSetAlbum } from "../../utils/fetchAlbumDetails";
-import Profile_FallBack from "../../assets/Profile_FallBack.svg";
+import Profile_Fallback from "../../assets/Profile_Fallback.svg";
 import Track_Album_Playlist_FallBack from "../../assets/Track_Album_Playlist_FallBack.svg";
 
 
@@ -103,7 +103,7 @@ export default function Search() {
 							}}
 						>
 							<img
-								src={artist.images?.[0]?.url || Profile_FallBack}
+								src={artist.images?.[0]?.url || Profile_Fallback}
 								alt={artist.name}
 							/>
 							<p>{artist.name}</p>

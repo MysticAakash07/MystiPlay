@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
 import { fetchAndSetAlbum } from "../utils/fetchAlbumDetails";
-import Profile_FallBack from "../assets/Profile_FallBack.svg";
+import Profile_Fallback from "../assets/Profile_Fallback.svg";
 import Track_Album_Playlist_FallBack from "../assets/Track_Album_Playlist_FallBack.svg";
 
 export default function Artist() {
@@ -67,7 +67,7 @@ export default function Artist() {
 		<Container>
 			<ArtistHeader>
 				<img
-					src={artistInfo.images?.[0]?.url || Profile_FallBack}
+					src={artistInfo.images?.[0]?.url || Profile_Fallback}
 					alt={artistInfo.name}
 				/>
 				<div className="artist-details">

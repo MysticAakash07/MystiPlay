@@ -307,7 +307,6 @@ const Container = styled.div`
 					display: flex;
 					align-self: center;
 					justify-content: center;
-					border: 2px solid red;
 				}
 			}
 		}
@@ -370,10 +369,16 @@ const Container = styled.div`
 				img {
 					height: 3vh !important;
 				}
+
+				.follow-icon {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 24px;
+					height: 24px;
+					margin-left: 0.5rem;
+				}
 			}
-			// .total-songs {
-			// 	display: none;
-			// }
 		}
 	}
 

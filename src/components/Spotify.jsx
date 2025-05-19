@@ -44,7 +44,7 @@ export default function Spotify() {
 	}, []);
 
 	return (
-		<Container showSidebar={showSidebar}>
+		<Container $showSidebar={showSidebar}>
 			<div className="spotify_body">
 				{showSidebar && (
 					<div className={`sidebar-container ${showSidebar ? "show" : ""}`}>
@@ -77,8 +77,8 @@ const Container = styled.div`
 	.spotify_body {
 		flex: 1;
 		display: grid;
-		grid-template-columns: ${({ showSidebar }) =>
-			showSidebar ? "15vw 85vw" : "0 100vw"};
+		grid-template-columns: ${({ $showSidebar }) =>
+			$showSidebar ? "15vw 85vw" : "0 100vw"};
 		transition: grid-template-columns 0.3s ease;
 		background: linear-gradient(transparent, rgba(0, 0, 0, 1));
 		background-color: rgb(32, 87, 108);

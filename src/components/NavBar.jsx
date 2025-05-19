@@ -29,7 +29,7 @@ export default function NavBar({ toggleSidebar, navBackground }) {
 	};
 
 	return (
-		<Container navBackground={navBackground}>
+		<Container $navBackground={navBackground}>
 			<div className="left">
 				<div onClick={toggleSidebar} className="menu">
 					<IoLibrary />
@@ -73,8 +73,8 @@ const Container = styled.div`
 	position: sticky;
 	top: 0;
 	transition: 0.3s ease-in-out;
-	background-color: ${({ navBackground }) =>
-		navBackground ? "rgba(0,0,0,.7)" : "none"};
+	background-color: ${({ $navBackground }) =>
+		$navBackground ? "rgba(0,0,0,.7)" : "none"};
 	box-sizing: border-box;
 	z-index: 100;
 

@@ -15,11 +15,14 @@ export default function Login() {
 			"user-read-playback-position",
 			"user-top-read",
 			"user-library-read",
+			"user-library-modify",
 			"user-read-recently-played",
 			"streaming",
 			"app-remote-control",
 			"user-follow-read",
 			"playlist-read-private",
+			"playlist-modify-public",
+			"playlist-modify-private",
 		];
 		window.location.href = `${apiUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope.join(
 			"%20"

@@ -11,7 +11,7 @@ export default function Home({ token }) {
 		<Container>
 			<Buttons>
 				<Button
-					active={activeSection === "playlists"}
+					$active={activeSection === "playlists"}
 					onClick={() => {
 						setActiveSection("playlists");
 					}}
@@ -19,7 +19,7 @@ export default function Home({ token }) {
 					Playlists
 				</Button>
 				<Button
-					active={activeSection === "albums"}
+					$active={activeSection === "albums"}
 					onClick={() => {
 						setActiveSection("albums");
 					}}
@@ -27,7 +27,7 @@ export default function Home({ token }) {
 					Albums
 				</Button>
 				<Button
-					active={activeSection === "artists"}
+					$active={activeSection === "artists"}
 					onClick={() => {
 						setActiveSection("artists");
 					}}
@@ -35,7 +35,7 @@ export default function Home({ token }) {
 					Top Artists
 				</Button>
 				<Button
-					active={activeSection === "tracks"}
+					$active={activeSection === "tracks"}
 					onClick={() => {
 						setActiveSection("tracks");
 					}}
@@ -80,14 +80,14 @@ const Button = styled.div`
 	cursor: pointer;
 	transition: 0.3s;
 
-	background-color: ${({ active }) =>
-		active ? "white" : "rgba(47, 48, 47, 0.9)"};
-	color: ${({ active }) => (active ? "black" : "white")};
+	background-color: ${({ $active }) =>
+		$active ? "white" : "rgba(47, 48, 47, 0.9)"};
+	color: ${({ $active }) => ($active ? "black" : "white")};
 	border: 2px solid
-		${({ active }) => (active ? "white" : "rgba(47, 48, 47, 0.9)")};
+		${({ $active }) => ($active ? "white" : "rgba(47, 48, 47, 0.9)")};
 	&:hover {
-		background-color: ${({ active }) =>
-			active ? "white" : "rgba(47, 48, 47, 0.5)"};
+		background-color: ${({ $active }) =>
+			$active ? "white" : "rgba(47, 48, 47, 0.5)"};
 		border-color: white;
 	}
 

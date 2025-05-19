@@ -34,7 +34,7 @@ export default function Album({ headerBackground }) {
 					</div>
 				</div>
 			</div>
-			<HeaderRow headerBackground={headerBackground}>
+			<HeaderRow $headerBackground={headerBackground}>
 				<div className="col">
 					<span>#</span>
 				</div>
@@ -393,8 +393,8 @@ const HeaderRow = styled.div`
 	top: 15vh;
 	padding: 1rem 3rem;
 	transition: 0.3s ease-in-out;
-	background-color: ${({ headerBackground }) =>
-		headerBackground ? "#000000dc" : "none"};
+	background-color: ${({ $headerBackground }) =>
+		$headerBackground ? "#000000dc" : "none"};
 
 	@media (max-width: 786px) {
 		font-size: 1rem;

@@ -4,6 +4,7 @@ export const initialState = {
 	token: null,
 	playlists: [],
 	userInfo: null,
+	userProduct: null,
 	selectedPlaylistId: "1W0wGJ9I2oJ1WKxqSpKPbE",
 	selectedAlbum: null,
 	selectedArtistId: "0hEurMDQu99nJRq8pTxO14",
@@ -111,6 +112,12 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				selectedArtistId: action.selectedArtistId,
+			};
+		}
+		case reducerCases.SET_USER_PRODUCT: {
+			return {
+				...state,
+				userProduct: action.userProduct,
 			};
 		}
 		default:

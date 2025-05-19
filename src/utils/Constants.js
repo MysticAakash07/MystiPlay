@@ -16,6 +16,7 @@ export const reducerCases = {
 	SET_ALBUM: "SET_ALBUM",
 	SET_SEARCH_RESULTS: "SET_SEARCH_RESULTS",
 	SET_ARTIST_ID: "SET_ARTIST_ID",
+	SET_USER_PRODUCT: "SET_USER_PRODUCT",
 };
 
 export const mstoMinutesAndSeconds = (ms) => {

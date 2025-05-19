@@ -1,6 +1,6 @@
 import axios from "axios";
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
 	reducerCases,
 	mstoMinutesAndSeconds,
@@ -8,14 +8,15 @@ import {
 	msToHourMin,
 } from "../utils/Constants";
 import { useStateProvider } from "../utils/StateProvider";
-import { AiFillClockCircle } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart, AiFillClockCircle } from "react-icons/ai";
 import { FaPlay } from "react-icons/fa";
 import Profile_FallBack from "../assets/Profile_FallBack.svg";
 import Track_Album_Playlist_FallBack from "../assets/Track_Album_Playlist_FallBack.svg";
 
 export default function Playlist({ headerBackground }) {
-	const [{ token, selectedPlaylistId, selectedPlaylist }, dispatch] =
+	const [{ userInfo, token, selectedPlaylistId, selectedPlaylist }, dispatch] =
 		useStateProvider();
+	const [isFollowing, setIsFollowing] = useState(false);
 
 	useEffect(() => {
 		const getInitialPlaylist = async () => {
@@ -92,6 +93,57 @@ export default function Playlist({ headerBackground }) {
 		getInitialPlaylist();
 	}, [token, dispatch, selectedPlaylistId]);
 
+	// Check follow status on component mount
+	useEffect(() => {
+		checkFollowStatus();
+	}, [token, selectedPlaylistId]);
+
+	// Check if user is following the playlist
+	const checkFollowStatus = async () => {
+		try {
+			const headers = {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			};
+
+			const response = await axios.get(
+				`https://api.spotify.com/v1/playlists/${selectedPlaylistId}/followers/contains?ids=${userInfo.id}`,
+				{ headers }
+			);
+
+			setIsFollowing(response.data[0]);
+		} catch (error) {
+			console.error("Error checking follow status:", error);
+		}
+	};
+
+	// Follow/Unfollow Playlist
+	const toggleFollow = async () => {
+		try {
+			const headers = {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			};
+
+			if (isFollowing) {
+				await axios.delete(
+					`https://api.spotify.com/v1/playlists/${selectedPlaylistId}/followers`,
+					{ headers }
+				);
+			} else {
+				await axios.put(
+					`https://api.spotify.com/v1/playlists/${selectedPlaylistId}/followers`,
+					{ public: true },
+					{ headers }
+				);
+			}
+
+			setIsFollowing(!isFollowing);
+		} catch (error) {
+			console.error("Error toggling follow status:", error);
+		}
+	};
+
 	if (!selectedPlaylist) return <div>Loading playlist...</div>;
 
 	return (
@@ -117,6 +169,15 @@ export default function Playlist({ headerBackground }) {
 						>
 							{selectedPlaylist.owner}
 						</a>
+						{userInfo.id !== selectedPlaylist.owner_id && (
+							<span className="follow-icon" onClick={toggleFollow}>
+								{isFollowing ? (
+									<AiFillHeart size={24} color=" #1db954" />
+								) : (
+									<AiOutlineHeart size={24} color="white" />
+								)}
+							</span>
+						)}
 						<span className="total-songs">
 							<b>·</b> {selectedPlaylist.total_songs} songs
 						</span>
@@ -128,7 +189,7 @@ export default function Playlist({ headerBackground }) {
 			</div>
 			<div className="list">
 				{/* Pass headerBackground prop here */}
-				<HeaderRow headerBackground={headerBackground}>
+				<HeaderRow $headerBackground={headerBackground}>
 					<div className="col">
 						<span>#</span>
 					</div>
@@ -226,10 +287,12 @@ const Container = styled.div`
 				display: flex;
 				align-items: center;
 				gap: 0.5rem;
+
 				img {
 					height: 5vh;
 					border-radius: 50%;
 				}
+
 				a {
 					text-decoration: none;
 					font-weight: bold;
@@ -238,6 +301,12 @@ const Container = styled.div`
 						text-decoration: underline;
 						color: white;
 					}
+				}
+
+				.follow-icon {
+					display: flex;
+					align-self: center;
+					justify-content: center;
 				}
 			}
 		}
@@ -497,8 +566,8 @@ const HeaderRow = styled.div`
 	top: 15vh;
 	padding: 1rem 3rem;
 	transition: 0.3s ease-in-out;
-	background-color: ${({ headerBackground }) =>
-		headerBackground ? "#000000dc" : "none"};
+	background-color: ${({ $headerBackground }) =>
+		$headerBackground ? "#000000dc" : "none"};
 
 	@media (max-width: 786px) {
 		font-size: 1rem;

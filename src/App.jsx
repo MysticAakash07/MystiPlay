@@ -9,13 +9,12 @@ import axios from "axios";
 export default function App() {
 	const [{ token }, dispatch] = useStateProvider();
 	const [player, setPlayer] = useState(null);
+	const [localProduct, setLocalProduct] = useState(null);
 
-	// Set Favicon Based on Light/Dark Mode
 	useEffect(() => {
 		setFavicon();
 	}, []);
 
-	// Extract token from URL on first load or check local storage
 	useEffect(() => {
 		const hash = window.location.hash;
 		let _token = hash ? hash.substring(1).split("&")[0].split("=")[1] : null;
@@ -26,65 +25,60 @@ export default function App() {
 
 		if (_token) {
 			dispatch({ type: reducerCases.SET_TOKEN, token: _token });
-			window._spotifyToken = _token; // Store globally for SDK
-			localStorage.setItem("spotifyToken", _token); // Persist token
-			window.location.hash = ""; // Clear hash
+			window._spotifyToken = _token;
+			localStorage.setItem("spotifyToken", _token);
+			window.history.replaceState(null, null, window.location.pathname);
 		}
 	}, [dispatch]);
 
-	// Ensure global token is always available
 	useEffect(() => {
 		if (token) {
 			window._spotifyToken = token;
 		}
 	}, [token]);
 
-	// Validate token to avoid being stuck in an empty state
 	const validateToken = async (token) => {
 		try {
 			const response = await axios.get("https://api.spotify.com/v1/me", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
+				headers: { Authorization: `Bearer ${token}` },
 			});
-			return response.status === 200;
+			if (response.status === 200) {
+				const product = response.data.product;
+				console.log("✅ User product:", product);
+				setLocalProduct(product); // <- Use local state for timing-sensitive checks
+				dispatch({ type: reducerCases.SET_USER_PRODUCT, userProduct: product });
+				return true;
+			}
 		} catch (error) {
 			console.error("Token validation failed:", error);
-			return false;
 		}
+		return false;
 	};
 
-	// Check token validity on initial load
 	useEffect(() => {
 		const checkTokenValidity = async () => {
 			if (token) {
 				const isValid = await validateToken(token);
 				if (!isValid) {
-					console.log("Token is invalid or expired. Redirecting to login...");
-					logout(); // Clear token and force re-login
+					console.log("Token invalid or expired. Redirecting to login...");
+					logout();
 				}
 			}
 		};
-
 		checkTokenValidity();
 	}, [token]);
 
-	// Logout/Disconnect function
 	const logout = () => {
 		localStorage.removeItem("spotifyToken");
 		dispatch({ type: reducerCases.SET_TOKEN, token: null });
-		window.location.reload(); // Force a re-login
+		window.location.reload();
 	};
 
-	// Setup Spotify SDK script and playback logic
 	useEffect(() => {
-		if (!token || player) return; // Prevent multiple initializations
+		if (!token || localProduct !== "premium" || player) return;
 
 		window.onSpotifyWebPlaybackSDKReady = () => {
-			if (player) {
-				console.log("Player already initialized");
-				return;
-			}
+			if (player) return;
 
 			const newPlayer = new window.Spotify.Player({
 				name: "MystiPlay🎧",
@@ -93,7 +87,7 @@ export default function App() {
 			});
 
 			newPlayer.addListener("ready", async ({ device_id }) => {
-				console.log("Ready with Device ID", device_id);
+				console.log("✅ Player ready with Device ID:", device_id);
 				dispatch({ type: reducerCases.SET_DEVICE_ID, deviceId: device_id });
 
 				try {
@@ -109,30 +103,30 @@ export default function App() {
 						}),
 					});
 				} catch (err) {
-					console.error("Error transferring playback:", err);
+					console.error("❌ Error transferring playback:", err);
 				}
 			});
 
 			newPlayer.addListener("not_ready", ({ device_id }) => {
-				console.log("Device ID has gone offline", device_id);
+				console.log("🔌 Device went offline:", device_id);
 			});
 
 			newPlayer.addListener("account_error", ({ message }) => {
-				console.error("Account Error:", message);
-				logout(); // If account error, force logout
+				console.error("❌ Account error:", message);
+				logout();
 			});
 
 			newPlayer.addListener("authentication_error", ({ message }) => {
-				console.error("Authentication Error:", message);
+				console.error("❌ Auth error:", message);
 				logout();
 			});
 
 			newPlayer.addListener("initialization_error", ({ message }) => {
-				console.error("Initialization Error:", message);
+				console.error("❌ Init error:", message);
 			});
 
 			newPlayer.addListener("playback_error", ({ message }) => {
-				console.error("Playback Error:", message);
+				console.error("❌ Playback error:", message);
 			});
 
 			newPlayer.connect();
@@ -148,23 +142,7 @@ export default function App() {
 		} else if (window.Spotify) {
 			window.onSpotifyWebPlaybackSDKReady();
 		}
-	}, [token, player, dispatch]);
-
-	//Added to check player_state
-	useEffect(() => {
-		if (player) {
-			player.addListener("player_state_changed", (state) => {
-				if (state && !state.paused && state.duration > 0) {
-					console.log("Playback started successfully");
-				} else {
-					console.log(
-						"Playback paused or stopped unexpectedly, trying to resume..."
-					);
-					player.resume().catch((err) => console.error("Resume failed:", err));
-				}
-			});
-		}
-	}, [player]);
+	}, [token, localProduct, player, dispatch]);
 
 	return <div>{token ? <Spotify /> : <Login />}</div>;
 }

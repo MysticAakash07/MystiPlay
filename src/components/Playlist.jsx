@@ -10,13 +10,21 @@ import {
 import { useStateProvider } from "../utils/StateProvider";
 import { AiOutlineHeart, AiFillHeart, AiFillClockCircle } from "react-icons/ai";
 import { FaPlay } from "react-icons/fa";
-import Profile_FallBack from "../assets/Profile_FallBack.svg";
+import Profile_Fallback from "../assets/Profile_Fallback.svg";
 import Track_Album_Playlist_FallBack from "../assets/Track_Album_Playlist_FallBack.svg";
 
 export default function Playlist({ headerBackground }) {
 	const [{ userInfo, token, selectedPlaylistId, selectedPlaylist }, dispatch] =
 		useStateProvider();
 	const [isFollowing, setIsFollowing] = useState(false);
+
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) return null;
 
 	useEffect(() => {
 		const getInitialPlaylist = async () => {
@@ -31,9 +39,6 @@ export default function Playlist({ headerBackground }) {
 				const initialResponse = await axios.get(baseUrl, { headers });
 				const totalTracks = initialResponse.data.tracks.total;
 				const ownerId = initialResponse.data.owner.id;
-
-				console.log(ownerId);
-				console.log(userInfo.id);
 
 				// Fetch all tracks using pagination
 				let allTracks = [];
@@ -165,7 +170,7 @@ export default function Playlist({ headerBackground }) {
 					<p className="description">{selectedPlaylist.description}</p>
 					<div className="playlistDetails">
 						<img
-							src={selectedPlaylist.owner_image || Profile_FallBack}
+							src={selectedPlaylist.owner_image || Profile_Fallback}
 							alt={selectedPlaylist.owner}
 						/>
 						<a
@@ -173,6 +178,7 @@ export default function Playlist({ headerBackground }) {
 						>
 							{selectedPlaylist.owner}
 						</a>
+						{userInfo.id !== selectedPlaylist.owner_id && (
 							<span className="follow-icon" onClick={toggleFollow}>
 								{isFollowing ? (
 									<AiFillHeart size={24} color="#1db954" />
@@ -180,6 +186,7 @@ export default function Playlist({ headerBackground }) {
 									<AiOutlineHeart size={24} color="white" />
 								)}
 							</span>
+						)}
 
 						<span className="total-songs">
 							<b>·</b> {selectedPlaylist.total_songs} songs

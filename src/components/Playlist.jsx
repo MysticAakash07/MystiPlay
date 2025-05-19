@@ -173,7 +173,6 @@ export default function Playlist({ headerBackground }) {
 						>
 							{selectedPlaylist.owner}
 						</a>
-						{userInfo.id !== selectedPlaylist.owner_id && (
 							<span className="follow-icon" onClick={toggleFollow}>
 								{isFollowing ? (
 									<AiFillHeart size={24} color="#1db954" />
@@ -181,7 +180,6 @@ export default function Playlist({ headerBackground }) {
 									<AiOutlineHeart size={24} color="white" />
 								)}
 							</span>
-						)}
 
 						<span className="total-songs">
 							<b>·</b> {selectedPlaylist.total_songs} songs

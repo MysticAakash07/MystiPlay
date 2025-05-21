@@ -7,18 +7,7 @@ export default function Login() {
 			? import.meta.env.VITE_SPOTIFY_REDIRECT_URI_PROD
 			: import.meta.env.VITE_SPOTIFY_REDIRECT_URI_DEV;
 		const apiUrl = import.meta.env.VITE_SPOTIFY_AUTH_URL;
-		const rawScopes = import.meta.env.VITE_SPOTIFY_SCOPES;
-
-		if (!rawScopes) {
-			console.log(clientId);
-			console.log(redirectUrl);
-			console.log(apiUrl);
-			console.error("VITE_SPOTIFY_SCOPES is undefined");
-			alert("Missing required Spotify configuration. Please try again later.");
-			return;
-		}
-
-		const scope = rawScopes.split(" ");
+		const scope = import.meta.env.VITE_SPOTIFY_SCOPES.split(" ");
 
 		window.location.href = `${apiUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope.join(
 			"%20"

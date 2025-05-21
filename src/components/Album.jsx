@@ -261,6 +261,12 @@ const AlbumContainer = styled.div`
 				gap: 1rem;
 				.info {
 					.name {
+						margin-right: 0.5rem;
+						display: -webkit-box;
+						-webkit-line-clamp: 1;
+						-webkit-box-orient: vertical;
+						overflow: hidden;
+						text-overflow: ellipsis;
 						color: white;
 						font-weight: 500;
 					}
@@ -277,6 +283,12 @@ const AlbumContainer = styled.div`
 
 			.album {
 				margin-left: 0;
+				display: -webkit-box;
+				-webkit-line-clamp: 1;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				text-wrap: nowrap;
 			}
 		}
 

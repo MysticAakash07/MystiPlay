@@ -442,6 +442,12 @@ const Container = styled.div`
 					gap: 1rem;
 					.info {
 						.name {
+							margin-right: 0.5rem;
+							display: -webkit-box;
+							-webkit-line-clamp: 1;
+							-webkit-box-orient: vertical;
+							overflow: hidden;
+							text-overflow: ellipsis;
 							color: white;
 							font-weight: 500;
 						}
@@ -457,10 +463,20 @@ const Container = styled.div`
 						}
 					}
 				}
+				.album {
+					align-self: center;
+					margin-right: 1rem;
+					display: -webkit-box;
+					-webkit-line-clamp: 1;
+					-webkit-box-orient: vertical;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 			}
 
 			@media (max-width: 786px) {
-				margin: 0 2rem;
+				margin: 0 1rem;
 				.row {
 					align-items: center;
 

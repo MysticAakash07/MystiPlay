@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useStateProvider } from "../utils/StateProvider";
 import styled from "styled-components";
 import { AiFillClockCircle } from "react-icons/ai";
@@ -8,7 +9,14 @@ import { playTrack } from "../utils/Constants";
 export default function Album({ headerBackground }) {
 	const [{ token, selectedAlbum }, dispatch] = useStateProvider();
 
-	if (!selectedAlbum) return <div>Loading...</div>;
+	useEffect(() => {
+		if (selectedAlbum) {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
+	}, [selectedAlbum]);
+
+	if (!selectedAlbum) 
+		return <Loading>Loading Album...</Loading>;
 	return (
 		<AlbumContainer>
 			<div className="album">
@@ -413,5 +421,20 @@ const HeaderRow = styled.div`
 	}
 	@media (max-width: 480px) {
 		display: none;
+	}
+`;
+
+const Loading = styled.div`
+	color: white;
+	height: 60vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	font-weight: 500;
+	gap: 0.5rem;
+
+	@media (mx-width: 768px) {
+		font-size: 1.2rem;
 	}
 `;

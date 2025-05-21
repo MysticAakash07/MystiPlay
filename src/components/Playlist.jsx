@@ -21,11 +21,16 @@ export default function Playlist({ headerBackground }) {
 	useEffect(() => {
 		const getInitialPlaylist = async () => {
 			try {
+				// Scroll to top immediately when new playlist is selected
+				window.scrollTo({ top: 0, behavior: "smooth" });
+
 				const baseUrl = `https://api.spotify.com/v1/playlists/${selectedPlaylistId}`;
 				const headers = {
 					Authorization: `Bearer ${token}`,
 					"Content-Type": "application/json",
 				};
+
+				dispatch({ type: reducerCases.SET_PLAYLIST, selectedPlaylist: null });
 
 				// First request to get metadata and total tracks
 				const initialResponse = await axios.get(baseUrl, { headers });
@@ -144,8 +149,9 @@ export default function Playlist({ headerBackground }) {
 		}
 	};
 
+
 	if (!userInfo || !selectedPlaylist || !selectedPlaylist.owner_id)
-		return <div>Loading playlist...</div>;
+	return <Loading>Loading playlist...</Loading>;
 
 	return (
 		<Container>
@@ -235,7 +241,10 @@ export default function Playlist({ headerBackground }) {
 
 								<div className="col detail">
 									<div className="image">
-										<img src={image} alt="track" />
+										<img
+											src={image || Track_Album_Playlist_FallBack}
+											alt="track"
+										/>
 									</div>
 									<div className="info">
 										<span className="name">{name}</span>
@@ -598,5 +607,20 @@ const HeaderRow = styled.div`
 	}
 	@media (max-width: 480px) {
 		display: none;
+	}
+`;
+
+const Loading = styled.div`
+	color: white;
+	height: 60vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	font-weight: 500;
+	gap: 0.5rem;
+
+	@media (mx-width: 768px) {
+		font-size: 1.2rem;
 	}
 `;

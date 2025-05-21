@@ -61,7 +61,7 @@ export default function Artist() {
 		dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
 	};
 
-	if (!artistInfo) return <Container>Loading artist...</Container>;
+	if (!artistInfo) return <Loading>Loading Artist...</Loading>;
 
 	return (
 		<Container>
@@ -328,5 +328,20 @@ const AlbumCard = styled.div`
 		p {
 			font-size: 0.8rem;
 		}
+	}
+`;
+
+const Loading = styled.div`
+	color: white;
+	height: 60vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	font-weight: 500;
+	gap: 0.5rem;
+
+	@media (mx-width: 768px) {
+		font-size: 1.2rem;
 	}
 `;

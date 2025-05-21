@@ -1,33 +1,19 @@
 import styled from "styled-components";
+
 export default function Login() {
 	const handleClick = () => {
-		const clientId = "eaba786aaaac4ba9893ac34f40b638b0";
+		const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 		const redirectUrl = import.meta.env.PROD
-			? "https://mystiplay.vercel.app/"
-			: "http://localhost:5173/";
-		const apiUrl = "https://accounts.spotify.com/authorize";
-		const scope = [
-			"user-read-email",
-			"user-read-private",
-			"user-read-playback-state",
-			"user-modify-playback-state",
-			"user-read-currently-playing",
-			"user-read-playback-position",
-			"user-top-read",
-			"user-library-read",
-			"user-library-modify",
-			"user-read-recently-played",
-			"streaming",
-			"app-remote-control",
-			"user-follow-read",
-			"playlist-read-private",
-			"playlist-modify-public",
-			"playlist-modify-private",
-		];
+			? import.meta.env.VITE_SPOTIFY_REDIRECT_URI_PROD
+			: import.meta.env.VITE_SPOTIFY_REDIRECT_URI_DEV;
+		const apiUrl = import.meta.env.VITE_SPOTIFY_AUTH_URL;
+		const scope = import.meta.env.VITE_SPOTIFY_SCOPES.split(" ");
+
 		window.location.href = `${apiUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope.join(
 			"%20"
-		)}&response_type=token&show_daialog=true`;
+		)}&response_type=token&show_dialog=true`;
 	};
+
 	return (
 		<Container>
 			<img
@@ -63,11 +49,9 @@ const Container = styled.div`
 	}
 	@media (max-width: 768px) {
 		gap: 2rem;
-
 		img {
 			height: 15vh;
 		}
-
 		button {
 			padding: 0.8rem 4rem;
 			font-size: 1.2rem;
@@ -77,7 +61,6 @@ const Container = styled.div`
 		img {
 			height: 12vh;
 		}
-
 		button {
 			padding: 0.6rem 3rem;
 			font-size: 1rem;

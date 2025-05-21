@@ -5,6 +5,8 @@ import { AiFillClockCircle } from "react-icons/ai";
 import { FaPlay } from "react-icons/fa";
 import { mstoMinutesAndSeconds } from "../utils/Constants";
 import { playTrack } from "../utils/Constants";
+import Track_Album_Playlist_FallBack from "../assets/Track_Album_Playlist_FallBack.svg";
+
 
 export default function Album({ headerBackground }) {
 	const [{ token, selectedAlbum }, dispatch] = useStateProvider();
@@ -21,7 +23,10 @@ export default function Album({ headerBackground }) {
 		<AlbumContainer>
 			<div className="album">
 				<div className="image">
-					<img src={selectedAlbum.image} alt={selectedAlbum.name} />
+					<img
+						src={selectedAlbum.image || Track_Album_Playlist_FallBack}
+						alt={selectedAlbum.name}
+					/>
 				</div>
 				<div className="details">
 					<span className="type">ALBUM</span>
@@ -85,7 +90,10 @@ export default function Album({ headerBackground }) {
 							</div>
 							<div className="col detail">
 								<div className="image">
-									<img src={image} alt="track" />
+									<img
+										src={image || Track_Album_Playlist_FallBack}
+										alt="track"
+									/>
 								</div>
 								<div className="info">
 									<span className="name">{name}</span>

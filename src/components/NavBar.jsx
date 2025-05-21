@@ -6,6 +6,8 @@ import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
 import { useState } from "react";
 import { IoLibrary } from "react-icons/io5";
+import Profile_Fallback from "../assets/Profile_Fallback.svg";
+
 export default function NavBar({ toggleSidebar, navBackground }) {
 	const [{ userInfo, token }, dispatch] = useStateProvider();
 	const [query, setQuery] = useState("");
@@ -55,7 +57,7 @@ export default function NavBar({ toggleSidebar, navBackground }) {
 					{userInfo?.images?.[0]?.url ? (
 						<img src={userInfo.images[0].url} alt="profile" />
 					) : (
-						<CgProfile />
+						<img src={Profile_Fallback} alt="profile_photo" />
 					)}
 					<span>{userInfo?.display_name}</span>
 				</a>

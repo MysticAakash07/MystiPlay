@@ -49,7 +49,7 @@ export default function CurrentTrack() {
 		};
 
 		getCurrentTrack();
-		intervalId = setInterval(getCurrentTrack, 5000);
+		intervalId = setInterval(getCurrentTrack, 3000);
 
 		return () => clearInterval(intervalId);
 	}, [token, currentlyPlaying, dispatch]);

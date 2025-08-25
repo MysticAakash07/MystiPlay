@@ -40,7 +40,7 @@ Include your **Spotify email address** so I can add it to the allowlist.
 
 ## 🛠 Tech Stack
 
-- **Frontend:** React (with Vite), Tailwind CSS
+- **Frontend:** React (with Vite), Styled Components
 - **State Management:** Context API + custom hooks
 - **API Integration:** Spotify Web API
 - **Auth:** Implicit grant OAuth flow

@@ -1,33 +1,54 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Login from "./components/Login";
 import Spotify from "./components/Spotify";
 import { useStateProvider } from "./utils/StateProvider";
 import { reducerCases } from "./utils/Constants";
 import setFavicon from "./utils/setFavicon";
+import { exchangeSpotifyCodeForToken } from "./utils/spotifyAuth";
 import axios from "axios";
 
 export default function App() {
 	const [{ token }, dispatch] = useStateProvider();
 	const [player, setPlayer] = useState(null);
 	const [localProduct, setLocalProduct] = useState(null);
+	const exchangedCodeRef = useRef(false);
 
 	useEffect(() => {
 		setFavicon();
 	}, []);
 
 	useEffect(() => {
-		const hash = window.location.hash;
-		let _token = hash ? hash.substring(1).split("&")[0].split("=")[1] : null;
+		const params = new URLSearchParams(window.location.search);
+		const code = params.get("code");
+		const error = params.get("error");
+		const storedToken = localStorage.getItem("spotifyToken");
 
-		if (!_token) {
-			_token = localStorage.getItem("spotifyToken");
-		}
-
-		if (_token) {
+		const saveToken = (_token) => {
 			dispatch({ type: reducerCases.SET_TOKEN, token: _token });
 			window._spotifyToken = _token;
 			localStorage.setItem("spotifyToken", _token);
-			window.history.replaceState(null, null, window.location.pathname);
+			window.history.replaceState(null, "", window.location.pathname);
+		};
+
+		if (error) {
+			console.error("Spotify login failed:", error);
+			window.history.replaceState(null, "", window.location.pathname);
+			return;
+		}
+
+		if (code && !exchangedCodeRef.current) {
+			exchangedCodeRef.current = true;
+			exchangeSpotifyCodeForToken(code)
+				.then(saveToken)
+				.catch((exchangeError) => {
+					console.error("Spotify token exchange failed:", exchangeError);
+					window.history.replaceState(null, "", window.location.pathname);
+				});
+			return;
+		}
+
+		if (storedToken) {
+			saveToken(storedToken);
 		}
 	}, [dispatch]);
 

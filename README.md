@@ -43,7 +43,7 @@ Include your **Spotify email address** so I can add it to the allowlist.
 - **Frontend:** React (with Vite), Styled Components
 - **State Management:** Context API + custom hooks
 - **API Integration:** Spotify Web API
-- **Auth:** Implicit grant OAuth flow
+- **Auth:** Authorization Code with PKCE OAuth flow
 - **Hosting:** Vercel
 
 ---
@@ -66,7 +66,7 @@ npm install
 * Create a new app
 * Add the following **Redirect URIs** in the app settings:
 
-  * `http://localhost:5173/`
+  * `http://127.0.0.1:5173/`
   * (Optional for prod) `https://your-deployed-url.com/`
 
 ### 3. Configure Environment Variables
@@ -75,9 +75,10 @@ Create a `.env` file at the root of the project:
 
 ```env
 VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id
-VITE_REDIRECT_URI=http://localhost:5173/
-VITE_AUTH_ENDPOINT=https://accounts.spotify.com/authorize
-VITE_SCOPES=user-read-private user-read-email playlist-read-private playlist-read-collaborative user-library-read user-library-modify user-follow-read user-follow-modify streaming app-remote-control user-read-playback-state user-modify-playback-state user-read-currently-playing
+VITE_SPOTIFY_REDIRECT_URI_DEV=http://127.0.0.1:5173/
+VITE_SPOTIFY_REDIRECT_URI_PROD=https://your-deployed-url.com/
+VITE_SPOTIFY_AUTH_URL=https://accounts.spotify.com/authorize
+VITE_SPOTIFY_SCOPES=user-read-private user-read-email playlist-read-private playlist-read-collaborative user-library-read user-library-modify user-follow-read user-follow-modify streaming app-remote-control user-read-playback-state user-modify-playback-state user-read-currently-playing
 ```
 
 > You can adjust scopes as needed. The above includes all features MystiPlay supports.
@@ -127,5 +128,3 @@ MystiPlay is currently in **development mode**. If Spotify reverts this decision
 ## 📜 License
 
 This project is open-source for educational and learning purposes. Not affiliated with Spotify.
-
-

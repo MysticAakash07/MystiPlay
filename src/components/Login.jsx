@@ -1,17 +1,13 @@
 import styled from "styled-components";
+import { createSpotifyAuthorizationUrl } from "../utils/spotifyAuth";
 
 export default function Login() {
-	const handleClick = () => {
-		const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-		const redirectUrl = import.meta.env.PROD
-			? import.meta.env.VITE_SPOTIFY_REDIRECT_URI_PROD
-			: import.meta.env.VITE_SPOTIFY_REDIRECT_URI_DEV;
-		const apiUrl = import.meta.env.VITE_SPOTIFY_AUTH_URL;
-		const scope = import.meta.env.VITE_SPOTIFY_SCOPES.split(" ");
-
-		window.location.href = `${apiUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope.join(
-			"%20"
-		)}&response_type=token&show_dialog=true`;
+	const handleClick = async () => {
+		try {
+			window.location.href = await createSpotifyAuthorizationUrl();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
